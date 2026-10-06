@@ -20,7 +20,7 @@ const FINITE_DIFFERENCE_STEP: float = 1e-6
 ## ratio, so the fits do not depend on these guesses.
 const K_INITIAL_GUESS: float = 1.0
 const WIND_RATIO_INITIAL_GUESS: float = 0.0
-## Gravity used while solving dimensionless quantities. Landing points do not
+## Gravity used while solving time-scale-independent quantities. Landing points do not
 ## depend on it once K is fixed (verified by tests).
 const UNIT_GRAVITY: float = 1.0
 

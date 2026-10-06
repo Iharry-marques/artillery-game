@@ -1,0 +1,62 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/debug/ballistics_lab/ballistics_lab.gd" id="1_lab"]
+[ext_resource type="Script" path="res://scripts/debug/ballistics_lab/lab_world_grid.gd" id="2_grid"]
+[ext_resource type="Script" path="res://scripts/debug/ballistics_lab/lab_trajectory_renderer.gd" id="3_path"]
+[ext_resource type="Script" path="res://scripts/debug/ballistics_lab/lab_reference_marker.gd" id="4_marker"]
+[ext_resource type="Script" path="res://scripts/debug/ballistics_lab/lab_playback_marker.gd" id="5_playback"]
+[ext_resource type="Script" path="res://scripts/debug/ballistics_lab/lab_debug_camera.gd" id="6_camera"]
+[ext_resource type="Script" path="res://scripts/debug/ballistics_lab/lab_panel.gd" id="7_panel"]
+
+[node name="BallisticsLab" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lab")
+
+[node name="Layout" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="WorldView" type="SubViewportContainer" parent="Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="WorldViewport" type="SubViewport" parent="Layout/WorldView"]
+handle_input_locally = false
+size = Vector2i(880, 720)
+render_target_update_mode = 4
+
+[node name="World" type="Node2D" parent="Layout/WorldView/WorldViewport"]
+
+[node name="WorldGrid" type="Node2D" parent="Layout/WorldView/WorldViewport/World"]
+script = ExtResource("2_grid")
+
+[node name="TrajectoryRenderer" type="Node2D" parent="Layout/WorldView/WorldViewport/World"]
+script = ExtResource("3_path")
+
+[node name="ShooterMarker" type="Node2D" parent="Layout/WorldView/WorldViewport/World"]
+script = ExtResource("4_marker")
+
+[node name="TargetMarker" type="Node2D" parent="Layout/WorldView/WorldViewport/World"]
+script = ExtResource("4_marker")
+kind = 1
+
+[node name="PlaybackMarker" type="Node2D" parent="Layout/WorldView/WorldViewport/World"]
+script = ExtResource("5_playback")
+
+[node name="DebugCamera" type="Camera2D" parent="Layout/WorldView/WorldViewport/World"]
+script = ExtResource("6_camera")
+
+[node name="Panel" type="PanelContainer" parent="Layout"]
+layout_mode = 2
+script = ExtResource("7_panel")

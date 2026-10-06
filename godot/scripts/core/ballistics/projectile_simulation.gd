@@ -32,7 +32,7 @@ static func simulate_to_plane(
 	result.launch_speed = speed
 	_store_apex(result, state)
 	if record_samples:
-		result.samples.append(Vector2(state.x, state.y))
+		_record_sample(result, state)
 
 	var max_steps: int = ceili(params.max_time / params.time_step)
 	for step in max_steps:
@@ -65,7 +65,7 @@ static func simulate_to_plane(
 
 		state = next
 		if record_samples:
-			result.samples.append(Vector2(state.x, state.y))
+			_record_sample(result, state)
 
 	_finish(result, BallisticResult.Termination.MAX_TIME, state, false)
 	return result
@@ -109,4 +109,9 @@ static func _finish(
 	result.impact_y = state.y
 	result.flight_time = state.time
 	if record_sample:
-		result.samples.append(Vector2(state.x, state.y))
+		_record_sample(result, state)
+
+
+static func _record_sample(result: BallisticResult, state: ProjectileState) -> void:
+	result.samples.append(Vector2(state.x, state.y))
+	result.sample_times.append(state.time)

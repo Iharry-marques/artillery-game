@@ -78,7 +78,7 @@ nova), **SUPERSEDED** (substituída). Decisões novas no fim.
   cruzamento descendente de y = 0, localizado dentro do passo.
 - **Consequência:** OQ-09 deixa de bloquear o núcleo e passa a IMPORTANT (vale para a implementação visual/de gameplay).
 
-### D-014 · Guardar relações adimensionais, derivar constantes dimensionais · ACCEPTED · 06/10/2026
+### D-014 · Guardar relações independentes da escala de tempo, derivar as demais · ACCEPTED · 06/10/2026
 - **Contexto:** as evidências restringem `K = v(95)²/g` e `a_vento/g`, não três constantes independentes.
 - **Decisão:** `GameMetrics` guarda `ballistic_k`, `ballistic_k_reference_power` e `wind_accel_ratio` (CALIBRATED) e
   `gravity` (ESTIMATED). `power_scale` e a aceleração do vento são métodos derivados, nunca armazenados.
@@ -107,3 +107,39 @@ nova), **SUPERSEDED** (substituída). Decisões novas no fim.
 ### D-018 · Precisão numérica e versão do Godot · ACCEPTED · 06/10/2026
 - **Decisão:** o estado da simulação usa escalares `float` (64 bits) e não `Vector2` (32 bits nos builds padrão). Vector2
   só aparece nas amostras de trajetória, que servem para exibição. Godot usado: 4.7.1-stable (official); `config/features = 4.7`.
+
+---
+
+## Marco 2: Ballistics Lab
+
+### D-019 · O Lab visualiza, não simula · ACCEPTED · 06/10/2026
+- **Decisão:** toda trajetória exibida vem de `ProjectileSimulation` (amostras + `sample_times` no `BallisticResult`).
+  O playback interpola entre amostras gravadas; não há segunda simulação nem fórmula de parábola na apresentação.
+  Helpers de mira só usam `BallisticEvidence`/`BallisticSolver`.
+- **Consequência:** `BallisticResult` ganhou `sample_times`. Teste garante que o Lab produz as mesmas amostras do simulador.
+
+### D-020 · Plano do alvo na altura do alvo; convenção y para baixo · ACCEPTED · 06/10/2026
+- **Decisão:** o impacto no Lab e no solver é o cruzamento descendente do plano `y = target_y`. A entrada "target y"
+  usa a convenção do Godot (+ = abaixo do atirador); o painel traduz para "ABOVE/BELOW". `BallisticSolver` ganhou
+  `target_y` opcional (padrão 0, comportamento anterior preservado) e passou a contornar a parte inalcançável do
+  intervalo de busca (ex.: força mínima que não alcança um alvo elevado) antes de procurar a raiz.
+- **Consequência:** o relatório de calibração do Marco 1 continua idêntico byte a byte.
+
+### D-021 · Largura da Battle View como métrica central · ACCEPTED · 06/10/2026
+- **Decisão:** `GameMetrics.battle_view_width_units = 10` (E-01). Câmeras derivam o zoom disso e do tamanho do viewport do
+  mundo; a resolução nunca entra em constantes. Apresentação do Lab: 100 px de canvas por u (`LabView`), irrelevante para
+  a física.
+- **Consequência:** em 1280×720, com o painel de 420 px, o mundo mostra 10 × 8,37 u. Outras proporções mudam só a altura.
+
+### D-022 · Lab como cena principal provisória; janela 1280×720 · PROVISIONAL · 06/10/2026
+- **Decisão:** `run/main_scene` aponta para o Lab até existir uma cena de batalha. Janela padrão 1280×720 (apresentação).
+
+### D-023 · Relatório de calibração determinístico · ACCEPTED · 06/10/2026
+- **Contexto:** o relatório tinha o tempo de execução, então mudava a cada execução. Além disso, K aparecia como
+  "adimensional", mas K = v²/g é um **comprimento** (u).
+- **Decisão:** o tempo de execução vai só para o stdout; o gerador classifica K como "length; independent of time scale" e
+  a razão do vento como "dimensionless ratio". O relatório foi regenerado pela ferramenta, com os mesmos valores.
+
+### D-024 · Revisão visual por captura automática · ACCEPTED · 06/10/2026
+- **Decisão:** `tools/run_ballistics_lab.sh --capture=<dir>` gera screenshots e números de todos os cenários. É a forma
+  padrão de o agente revisar mudanças visuais. Screenshots ficam fora do repositório.

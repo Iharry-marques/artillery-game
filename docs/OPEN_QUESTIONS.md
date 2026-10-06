@@ -29,7 +29,7 @@ Nenhuma no momento. As duas que existiam foram reclassificadas no Marco 1:
 - **Status:** **não bloqueia o núcleo balístico** (D-013: calibração com lançamento em (0, 0) e impacto no cruzamento de y = 0).
   Precisa ser resolvida antes da implementação visual/de gameplay (personagem, terreno, Lab com alvos reais).
 - **Default proposto:** lançamento e medição de distância a partir do mesmo ponto de referência do personagem, com offset de
-  cano zero; reavaliar com o Lab.
+  cano zero. O Ballistics Lab (Marco 2) usa exatamente isso: atirador em (0, 0), sem hitbox e sem cano.
 - **Resolve com:** medição em vídeo (de onde o projétil aparece) + decisão de design.
 
 ### OQ-01 · Tempo de voo do Full Throw
@@ -114,6 +114,10 @@ Nenhuma no momento. As duas que existiam foram reclassificadas no Marco 1:
 
 ### OQ-20 · Compensação de desnível vertical
 - **Pergunta:** como os jogadores corrigiam o desnível no Full Throw (regra de bolso, tipo "+1 de distância por X de altura")?
+- **Ferramenta:** Ballistics Lab, cenários E (alvo 2 u acima) e F (2 u abaixo), e o campo "Target y".
+- **Previsão do modelo (não é evidência):** no Full Throw o projétil desce quase na vertical, então o desnível pesa pouco.
+  Em D = 5 a 85°, 2 u acima → impacto 4,86 (−0,14 u); 2 u abaixo → 5,21 (+0,21 u). Isso daria uma correção de
+  ~0,07–0,1° por unidade de altura. Se o jogador lembra de corrigir bem mais que isso, o modelo está incompleto.
 - **Resolve com:** memória do jogador; depois, previsão pela nossa simulação para comparar.
 
 ## OPTIONAL

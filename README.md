@@ -8,13 +8,15 @@ com Força 95). Arte, personagens, mapas, armas, nomes e identidade serão próp
 
 ## Estado atual
 
-Marco 1 concluído: núcleo balístico headless (simulação determinística + calibração reproduzível + testes).
-Ainda não há gameplay visual. Veja [docs/PROGRESS.md](docs/PROGRESS.md) e [docs/PHYSICS_MODEL.md](docs/PHYSICS_MODEL.md).
+Marco 2 concluído: **Ballistics Lab** visual sobre o núcleo balístico headless do Marco 1 (simulação determinística,
+calibração reproduzível e testes). Ainda não há cena de batalha. Veja [docs/PROGRESS.md](docs/PROGRESS.md),
+[docs/PHYSICS_MODEL.md](docs/PHYSICS_MODEL.md) e [docs/BALLISTICS_LAB.md](docs/BALLISTICS_LAB.md).
 
 ```bash
 export GODOT=/caminho/para/Godot        # opcional se estiver no PATH ou em /Applications
 tools/run_tests.sh                      # checagem estática + testes
 tools/ballistics/calibrate.sh           # relatório de calibração
+tools/run_ballistics_lab.sh             # abre o Ballistics Lab
 ```
 
 ## Estrutura

@@ -3,7 +3,8 @@ extends SceneTree
 ## Run with tools/run_tests.sh. Exits with status 1 if any test fails.
 ##
 ## Discovers res://tests/test_*.gd; each file extends TestCase and every method
-## whose name starts with "test_" is a test. Optional user argument:
+## whose name starts with "test_" is a test. Tests may be coroutines (await
+## frames); the runner awaits each one. Optional user argument:
 ##   --filter=<substring>   only run tests whose "file::method" contains it
 
 const TESTS_DIR: String = "res://tests"
@@ -30,7 +31,7 @@ func _initialize() -> void:
 				continue
 			var test: TestCase = script.new() as TestCase
 			var started_ms: int = Time.get_ticks_msec()
-			test.call(method_name)
+			await test.call(method_name)
 			var elapsed_ms: int = Time.get_ticks_msec() - started_ms
 			if test.failures.is_empty():
 				passed += 1

@@ -1,6 +1,6 @@
 # Modelo físico do projétil
 
-> **Status: modelo candidato com relações adimensionais CALIBRADAS no simulador real (Marco 1).**
+> **Status: modelo candidato com relações independentes da escala de tempo CALIBRADAS no simulador real (Marco 1).**
 > A forma do modelo (sem arrasto, vento como aceleração horizontal constante, força linear) continua sendo
 > hipótese. A escala de tempo (gravidade) continua **ESTIMATED / LOW**.
 > Resultados completos e reproduzíveis: [tools/ballistics/reports/calibration_report.md](../tools/ballistics/reports/calibration_report.md).
@@ -95,8 +95,8 @@ As evidências fixam **razões**, não três constantes independentes. Por isso 
 
 | Grandeza | Classe | Valor |
 |---|---|---|
-| `K = v(95)² / g` | **CALIBRATED** (relação adimensional) | **29,033036 u** |
-| `wind_accel_ratio` = aceleração do vento por 1,0 de vento ÷ g | **CALIBRATED** (relação adimensional) | **0,034401** (= g / 29,07) |
+| `K = v(95)² / g` | **CALIBRATED** (comprimento, em u; independe da escala de tempo) | **29,033036 u** |
+| `wind_accel_ratio` = aceleração do vento por 1,0 de vento ÷ g | **CALIBRATED** (razão adimensional) | **0,034401** (= g / 29,07) |
 | `gravity` | **ESTIMATED / LOW** (escala de tempo) | 7,039396 u/s² |
 
 Derivados, nunca armazenados: `power_scale = √(K·g) / 95` = 0,150484 u/s por ponto; `v(95)` = 14,296 u/s;

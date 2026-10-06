@@ -23,7 +23,7 @@ Relações de gameplay que o sistema **deve** reproduzir (requisitos, não const
 
 | Métrica | Valor | Fonte |
 |---|---|---|
-| Largura visível da câmera | 10 u | E-01 |
+| Largura visível da câmera | 10 u (`battle_view_width_units` no `game_metrics.tres`) | E-01 |
 | Força do Full Throw | ≈ 95 | E-02 |
 | Relação Full Throw, vento 0, desnível 0 | Ângulo ≈ 90 − D | E-03 |
 | Correção de vento do Full Throw | ≈ 2° por 1,0 de vento (contra → −, a favor → +) | E-04 |
@@ -32,9 +32,10 @@ Relações de gameplay que o sistema **deve** reproduzir (requisitos, não const
 
 ## CALIBRATED
 
-### Relações adimensionais calibradas
+### Relações calibradas independentes da escala de tempo
 
-Valores resolvidos pelo simulador real e protegidos por teste. Não dependem da escala de tempo.
+Valores resolvidos pelo simulador real e protegidos por teste. Não dependem da escala de tempo (gravidade).
+K é um **comprimento** (v²/g, em u); `wind_accel_ratio` é uma **razão adimensional**.
 
 | Métrica | Valor | Como foi obtida | Resultado verificado |
 |---|---|---|---|

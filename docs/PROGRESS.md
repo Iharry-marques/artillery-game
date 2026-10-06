@@ -4,6 +4,30 @@ Diário de engenharia. Entrada mais recente no topo.
 
 ---
 
+## 06/10/2026 · Marco 2: Ballistics Lab visual
+
+**Revisão inicial**
+- 20/20 testes e calibração ok antes de mudar algo. O repositório **não** estava limpo: `project.godot` tinha o cabeçalho
+  reescrito pelo Godot (adotado), e o relatório mudava a cada execução por causa do tempo de execução (corrigido no gerador, D-023).
+- Terminologia: K é comprimento (u), não "adimensional". Corrigido em PHYSICS_MODEL, GAME_METRICS, DECISIONS, comentários
+  e no gerador do relatório. Valores inalterados.
+
+**Feito**
+- `scenes/debug/ballistics_lab.tscn` + `scripts/debug/ballistics_lab/` (14 scripts focados). Trajetória só de `ProjectileSimulation`.
+- Núcleo: `BallisticResult.sample_times`; `BallisticSolver` com `target_y` e tratamento da borda inalcançável do intervalo;
+  `GameMetrics.battle_view_width_units = 10`.
+- Grade 1/5/10 u, alvo com altura (y para baixo), Full Throw preset sem clamp (OQ-22 visível), solver de ângulo/força com
+  NO SOLUTION, painel de leitura, câmeras Battle/Follow/Fit, playback em tempo simulado.
+- `tools/run_ballistics_lab.sh` (+ `--capture`), `docs/BALLISTICS_LAB.md`.
+- Testes: 34 (20 anteriores + 14 novos). Calibração reproduz o Marco 1 byte a byte.
+- Revisão visual feita pelo agente via screenshots: corrigidos leitura fora da dobra do painel, rótulos cortados nas bordas
+  e falta de folga no Fit View.
+
+**Não feito (de propósito)**
+- Cena de batalha, terreno, personagens, HUD de batalha, turnos, dano, Blender, barra de carga de força.
+
+---
+
 ## 06/10/2026 · Marco 1: núcleo balístico headless
 
 **Feito**

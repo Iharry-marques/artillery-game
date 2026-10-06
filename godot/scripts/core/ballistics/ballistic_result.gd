@@ -24,6 +24,8 @@ var apex_time: float
 var step_count: int
 ## Positions at every full step plus the terminal point. Single precision; for display only.
 var samples: PackedVector2Array = PackedVector2Array()
+## Simulation time (s) of each entry in samples, same length. Used for playback.
+var sample_times: PackedFloat64Array = PackedFloat64Array()
 
 
 func hit_plane() -> bool:

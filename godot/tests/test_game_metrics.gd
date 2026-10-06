@@ -9,7 +9,7 @@ func test_metrics_resource_is_complete() -> void:
 	assert_true(metrics != null, "game_metrics.tres must load")
 	if metrics == null:
 		return
-	for property: StringName in [&"ballistic_k", &"ballistic_k_reference_power", &"wind_accel_ratio", &"gravity", &"time_step", &"max_flight_time"]:
+	for property: StringName in [&"ballistic_k", &"ballistic_k_reference_power", &"wind_accel_ratio", &"gravity", &"time_step", &"max_flight_time", &"battle_view_width_units"]:
 		var value: float = metrics.get(property)
 		assert_true(value > 0.0, "%s must be positive, got %s" % [property, value])
 

@@ -2,7 +2,7 @@
 
 > Fronteiras e responsabilidades. Nomes de classes em inglês (código).
 > **Implementado no Marco 1:** `GameMetrics`, `ProjectileSimulation` (+ estado, integrador, modelo de força, parâmetros,
-> resultado) e o solver inverso de mira. O restante é só desenho.
+> resultado) e o solver inverso de mira. **Marco 2:** Ballistics Lab (ferramenta de debug, seção 7). O restante é só desenho.
 > Última revisão: 06/10/2026.
 
 ## 1. Camadas
@@ -95,10 +95,36 @@ tests/                                 ✔ run_tests.gd, support/, test_*.gd
 scenes/                                planejado: lab/ (Ballistics Lab), battle/
 ```
 
-`calibration/` e `tests/` dependem de `core/`; o `core/` não depende deles. Os dados de evidência
+scripts/debug/ballistics_lab/          ✔ Ballistics Lab (seção 7)
+scenes/debug/ballistics_lab.tscn       ✔ cena do Lab (cena principal do projeto por enquanto)
+
+`calibration/`, `tests/` e `debug/` dependem de `core/`; o `core/` não depende deles. Os dados de evidência
 (`BallisticEvidence`) nunca são lidos pela física.
 
 ## 6. Fora do escopo (decisão explícita necessária para entrar)
 
 Networking, backend, contas, matchmaking, persistência online, monetização, sistema de atributos de RPG,
 itens e mascotes.
+
+## 7. Ballistics Lab (Marco 2, ferramenta de debug)
+
+```
+BallisticsLab (Control, orquestra)                      scripts/debug/ballistics_lab/
+├── Layout/WorldView (SubViewportContainer)
+│   └── WorldViewport/World
+│       ├── WorldGrid            LabWorldGrid           régua 1 / 5 / 10 u, y = 0, rótulos
+│       ├── TrajectoryRenderer   LabTrajectoryRenderer  desenha amostras do BallisticResult
+│       ├── ShooterMarker        LabReferenceMarker     ponto de referência (0, 0)
+│       ├── TargetMarker         LabReferenceMarker     (facing·D, target y)
+│       ├── PlaybackMarker       LabPlaybackMarker      replay por sample_times
+│       └── DebugCamera          LabDebugCamera         BATTLE / FOLLOW / FIT
+└── Layout/Panel                 LabPanel               leitura + controles
+Lógica pura (testável sem cena): LabShotSetup, LabScenarios, LabAimingTools,
+TrajectoryPlayback, BattleViewFraming, LabResultFormatter, LabView.
+```
+
+- `LabShotSetup.simulate()` chama `ProjectileSimulation.simulate_to_plane()` com o plano na altura do alvo. É a única
+  fonte de trajetória do Lab.
+- Helpers de mira só chamam `BallisticEvidence` / `BallisticSolver`.
+- A largura de 10 u vem de `GameMetrics.battle_view_width_units`; o zoom é derivado do tamanho do viewport do mundo.
+- `LabCapture` (`--capture=<dir>`) percorre cenários e câmeras, imprime os números e salva PNGs (revisão visual).

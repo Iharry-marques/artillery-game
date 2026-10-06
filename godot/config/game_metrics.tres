@@ -8,5 +8,6 @@ ballistic_k = 29.033036394760252
 ballistic_k_reference_power = 95.0
 wind_accel_ratio = 0.03440095346658403
 gravity = 7.03939580674079
+battle_view_width_units = 10.0
 time_step = 0.01666666666666666
 max_flight_time = 30.0

@@ -4,8 +4,9 @@ extends Resource
 ## evidence class and origin are documented in docs/GAME_METRICS.md.
 ##
 ## The ballistic data is stored as the quantities the evidence actually constrains:
-## two dimensionless relationships (CALIBRATED) plus one time-scale value
-## (ESTIMATED). power_scale and the wind acceleration are derived, never stored.
+## two time-scale-independent relationships (CALIBRATED) - K, a length in u, and
+## the dimensionless wind ratio - plus one time-scale value (ESTIMATED).
+## power_scale and the wind acceleration are derived, never stored.
 
 const DEFAULT_PATH: String = "res://config/game_metrics.tres"
 
@@ -16,6 +17,11 @@ const DEFAULT_PATH: String = "res://config/game_metrics.tres"
 @export var ballistic_k_reference_power: float = 0.0
 ## Horizontal wind acceleration produced by 1.0 of wind, as a fraction of gravity.
 @export var wind_accel_ratio: float = 0.0
+
+@export_group("Measurement")
+## Visible world width of the battle camera, in distance units (E-01: one screen
+## width = 10 units). Cameras derive their zoom from this; resolution never does.
+@export var battle_view_width_units: float = 0.0
 
 @export_group("Time scale (provisional)")
 ## Distance units per second squared. Changes flight duration only, not landing points.
