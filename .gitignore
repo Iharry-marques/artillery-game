@@ -1,0 +1,34 @@
+# Godot 4
+godot/.godot/
+godot/export/
+*.translation
+# Arquivos .import do Godot 4 DEVEM ser versionados (não ignorar).
+
+# Blender
+*.blend1
+*.blend2
+*.blend@
+
+# Python (tools/)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Captura de referência: vídeos e frames de jogos de terceiros NUNCA entram no repositório.
+# Apenas medições numéricas extraídas deles podem ser versionadas.
+tools/capture/raw/
+tools/capture/frames/
+research/captures/
+
+# Saídas geradas
+tools/ballistics/out/
+*.log
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
