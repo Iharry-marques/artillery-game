@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="GameMetrics" format=3]
+
+[ext_resource type="Script" path="res://scripts/core/game_metrics.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+ballistic_k = 29.033036394760252
+ballistic_k_reference_power = 95.0
+wind_accel_ratio = 0.03440095346658403
+gravity = 7.03939580674079
+time_step = 0.01666666666666666
+max_flight_time = 30.0

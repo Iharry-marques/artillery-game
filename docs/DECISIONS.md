@@ -51,11 +51,59 @@ nova), **SUPERSEDED** (substituída). Decisões novas no fim.
 - **Contexto:** o modelo reproduz o ×2 do Full Throw e prevê o ×1 da técnica de 30° (PHYSICS_MODEL §4.3).
 - **Decisão:** adotar como hipótese de trabalho até a calibração/validação do marco 1.
 
-### D-010 · Parâmetros provisórios de escala · PROVISIONAL · 06/10/2026
-- **Decisão:** tempo de voo do Full Throw = 4 s (define g ≈ 7,0 u/s²); dt = 1/60 s; apresentação 1 u = 100 px.
-- **Consequência:** substituíveis sem tocar em gameplay, porque as relações de mira dependem só de razões (PHYSICS_MODEL §4.6).
-  Recalibrar `power_scale` e `wind_accel_per_unit` ao mudar g ou dt.
+### D-010 · Parâmetros provisórios de escala · PROVISIONAL · 06/10/2026 (revisada no Marco 1)
+- **Decisão:** tempo de voo do Full Throw em D = 10 = 4 s (define g = 7,039396 u/s²); dt = 1/60 s; apresentação 1 u = 100 px.
+- **Consequência:** substituíveis sem tocar em gameplay, porque as relações de mira dependem só de razões.
+  `power_scale` e a aceleração do vento são derivados de K, ratio e g (D-014), então mudar g não exige recalibrar.
+  Com o integrador exato (D-012), dt não afeta impactos.
 
 ### D-011 · Raiz do repositório · ACCEPTED · 06/10/2026
 - **Decisão:** a raiz do repositório git é `artillery-game/`; o projeto Godot fica em `artillery-game/godot/`, isolando
   docs, pesquisa, Blender e ferramentas da importação de assets do Godot.
+
+---
+
+## Marco 1: núcleo balístico headless
+
+### D-012 · Integrador baseline: cinemática exata para aceleração constante · ACCEPTED · 06/10/2026
+- **Contexto:** o PHYSICS_MODEL do Marco 0 propunha Euler semi-implícito. Não há evidência de que o erro de integração
+  histórico fizesse parte do comportamento do DDTank.
+- **Decisão:** `p += v·dt + ½·a·dt²; v += a·dt`. Como a aceleração é constante no voo, a trajetória é a parábola exata e
+  independe do dt. O integrador é uma estratégia (`BallisticIntegrator`), aberta a um integrador "legado" se surgir evidência.
+- **Consequência:** invariância de timestep testada (≤ 1,5e-13 u). Ápice e cruzamento dentro do passo são localizados
+  pelo próprio integrador.
+
+### D-013 · Geometria de calibração sem personagem · ACCEPTED · 06/10/2026
+- **Decisão:** atirador em (0, 0), alvo em (D, 0), sem offset de cano, sem hitbox, sem raio de projétil. Impacto =
+  cruzamento descendente de y = 0, localizado dentro do passo.
+- **Consequência:** OQ-09 deixa de bloquear o núcleo e passa a IMPORTANT (vale para a implementação visual/de gameplay).
+
+### D-014 · Guardar relações adimensionais, derivar constantes dimensionais · ACCEPTED · 06/10/2026
+- **Contexto:** as evidências restringem `K = v(95)²/g` e `a_vento/g`, não três constantes independentes.
+- **Decisão:** `GameMetrics` guarda `ballistic_k`, `ballistic_k_reference_power` e `wind_accel_ratio` (CALIBRATED) e
+  `gravity` (ESTIMATED). `power_scale` e a aceleração do vento são métodos derivados, nunca armazenados.
+- **Consequência:** a escala de tempo pode mudar sem mexer em onde os tiros caem.
+
+### D-015 · Calibração reproduzível dentro do projeto Godot · ACCEPTED · 06/10/2026
+- **Contexto:** a calibração precisa rodar a simulação GDScript real (D-004), que só é acessível dentro de `res://`.
+- **Decisão:** código de calibração em `godot/calibration/` (evidência de referência, calibrador, gerador de relatório);
+  ponto de entrada em `tools/ballistics/calibrate.sh`; relatório versionado em `tools/ballistics/reports/`.
+  A análise Python do Marco 0 (scratchpad) foi descartada: tudo é reproduzível pelo repositório.
+- **Consequência:** `test_stored_metrics_match_a_fresh_calibration` falha se o `.tres` for editado à mão.
+
+### D-016 · Testes headless com runner próprio e tipagem estrita · ACCEPTED · 06/10/2026
+- **Decisão:** runner mínimo (`godot/tests/run_tests.gd`, base `TestCase`), sem dependência externa. `tools/run_tests.sh`
+  faz checagem estática de todo `.gd` e roda a suíte. Retorna código ≠ 0 em falha de teste, erro de script ou erro de
+  parse. Warnings de tipagem (`untyped_declaration`, `unsafe_*`) são **erros** no `project.godot`, porque o Godot não
+  imprime warnings em `--script`/`--check-only`.
+- **Consequência:** resolve OQ-18. GUT/gdUnit4 podem ser reavaliados quando houver testes de cena.
+
+### D-017 · Métodos numéricos da calibração · ACCEPTED · 06/10/2026
+- **Decisão:** ajustes de um parâmetro por mínimos quadrados com Gauss-Newton (derivada numérica); perguntas inversas
+  (ângulo/força que acerta D) por Illinois (regula falsi modificada, com intervalo); ápice e cruzamento dentro do passo por
+  bisseção. A métrica de erro é sempre explícita e documentada no PHYSICS_MODEL.
+- **Consequência:** calibração completa em < 1 s; testes em ~8 s, incluindo a checagem estática.
+
+### D-018 · Precisão numérica e versão do Godot · ACCEPTED · 06/10/2026
+- **Decisão:** o estado da simulação usa escalares `float` (64 bits) e não `Vector2` (32 bits nos builds padrão). Vector2
+  só aparece nas amostras de trajetória, que servem para exibição. Godot usado: 4.7.1-stable (official); `config/features = 4.7`.

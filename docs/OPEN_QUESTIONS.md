@@ -1,7 +1,7 @@
 # Perguntas em aberto
 
 **Importância:**
-- **BLOCKING:** impede o próximo marco (núcleo balístico headless).
+- **BLOCKING:** impede o próximo marco.
 - **IMPORTANT:** afeta a fidelidade do gameplay; precisa ser resolvida antes da fatia vertical.
 - **OPTIONAL:** refinamento.
 
@@ -11,54 +11,63 @@ fidelidade histórica não importa).
 
 Toda pergunta tem um **default proposto** para não travar o trabalho. O default é usado até a evidência chegar.
 
-Última revisão: 06/10/2026.
+Última revisão: 06/10/2026 (Marco 1).
 
 ---
 
 ## BLOCKING
 
-### OQ-09 · Ponto de lançamento e ponto de referência do alvo
-- **Pergunta:** de onde sai o projétil (pés, centro, cano?) e qual ponto do alvo define "distância" e "acerto"?
-  Em D = 3, um offset de cano de 0,3 u já muda o resultado.
-- **Default proposto:** o lançamento e a medição de distância usam o mesmo ponto de referência do personagem, na mesma
-  altura do alvo (desnível 0 = mesma altura de referência). O offset do cano é zero no marco 1.
-- **Resolve com:** medição em vídeo (de onde o projétil aparece) + decisão de design.
-
-### OQ-18 · Infraestrutura de teste headless
-- **Pergunta:** framework de testes (GUT, gdUnit4 ou runner próprio) e versão exata do Godot 4.x.
-  Em 06/10/2026, Godot não estava instalado.
-- **Default proposto:** Godot 4 estável mais recente; runner mínimo próprio (`godot --headless --script`) para os testes
-  balísticos, sem dependência externa. Reavaliar GUT/gdUnit4 quando houver testes de cena.
-- **Resolve com:** decisão técnica + instalação.
+Nenhuma no momento. As duas que existiam foram reclassificadas no Marco 1:
+- OQ-09 → IMPORTANT. A calibração usa uma geometria sem personagem (D-013).
+- OQ-18 → RESOLVIDA (D-016).
 
 ## IMPORTANT
 
+### OQ-09 · Ponto de lançamento e ponto de referência do alvo
+- **Pergunta:** de onde sai o projétil (pés, centro, cano?) e qual ponto do alvo define "distância" e "acerto"?
+  Em D = 3, um offset de cano de 0,3 u já muda o resultado.
+- **Status:** **não bloqueia o núcleo balístico** (D-013: calibração com lançamento em (0, 0) e impacto no cruzamento de y = 0).
+  Precisa ser resolvida antes da implementação visual/de gameplay (personagem, terreno, Lab com alvos reais).
+- **Default proposto:** lançamento e medição de distância a partir do mesmo ponto de referência do personagem, com offset de
+  cano zero; reavaliar com o Lab.
+- **Resolve com:** medição em vídeo (de onde o projétil aparece) + decisão de design.
+
 ### OQ-01 · Tempo de voo do Full Throw
 - **Pergunta:** quantos segundos durava um Full Throw a ~10 de distância? Define a gravidade (o *feel*).
-- **Default:** 4 s (D-010).
+- **Default:** 4 s (D-010) → g = 7,039 u/s². Trocar não altera os pontos de impacto (verificado em teste).
 - **Resolve com:** memória do jogador (ordem de grandeza) ou cronometragem em vídeo.
 
 ### OQ-02 · Altura do ápice do Full Throw
 - **Pergunta:** o projétil do Full Throw subia ≈ 14 u (≈ 1,4 largura de tela) acima do atirador, como o modelo prevê?
+  Simulador: 14,08 u em D = 10, independente da gravidade.
 - **Resolve com:** vídeo (tempo fora da tela no topo + câmera seguindo) ou memória ("sumia da tela por quanto tempo?").
   Se o ápice real for muito diferente, o modelo sem arrasto está errado.
 
 ### OQ-04 · Magnitude da tabela de força de 30°
-- **Pergunta:** a tabela D1 → 14, D5 → 32, D10 → 47,5 é real? O modelo calibrado no Full Throw prevê ~19 / 42 / 60.
+- **Pergunta:** a tabela D1 → 14, D5 → 32, D10 → 47,5 é real?
+- **Medido no Marco 1:** o modelo calibrado no Full Throw pede 18,95 / 42,36 / 59,91 (razão 1,35 / 1,32 / 1,26).
+  Como a razão não é constante, não basta mudar a escala de força. O fator de vento de 30° (×1), porém, o modelo
+  reproduz (×1,00).
 - **Resolve com:** memória do jogador (lembra alguma força de técnica de ângulo baixo?) ou tabela da comunidade com fonte verificável.
 - **Default:** confiar no Full Throw; tratar a tabela como LOW.
 
 ### OQ-05 · Fator de vento das técnicas de 65° e 50°
-- **Pergunta:** a comunidade diz ×2 para ambas; o modelo prevê ≈ 2,56 (65°) e ≈ 6,8 (50°).
+- **Pergunta:** a comunidade diz ×2 para ambas.
+- **Medido no Marco 1:** 65° → ×2,52 (2,55 contra / 2,49 a favor). 50° → com vento contra **não há** ângulo que compense
+  com a mesma força; a favor, +5,1°. A compensação por força a 50° seria de ±0,4 a ±1,2 ponto por 1,0 de vento (D = 1…10).
 - **Resolve com:** memória do jogador / tabela da comunidade; experimento na simulação após o marco 1.
   Hipótese: a técnica de 50° compensava o vento pela **força**, não pelo ângulo.
 
 ### OQ-06 · Half Throw
-- **Pergunta:** força e regra exatas. Fonte: força ≈ 60 e 90 − 2D; o modelo exige força ≈ 67 para 90 − 2D.
+- **Pergunta:** força e regra exatas. Fonte: força ≈ 60 e 90 − 2D.
+- **Medido no Marco 1:** melhor força para 90 − 2D = 68,5 (exata por distância: 66,8 a 69,5). Com força 60 o tiro cai
+  19–26% curto, e a regra coerente seria ≈ 2,5–3,0° por unidade. Coincidência a investigar: o modelo pede força 59,9
+  para 30° em D = 10.
 - **Resolve com:** memória do jogador; tabela da comunidade.
 
 ### OQ-07 · Full Throw além de 10 unidades
-- **Pergunta:** a regra 90 − D funcionava em D = 15, 20? O modelo prevê que o tiro cai curto (14,5 / 18,7).
+- **Pergunta:** a regra 90 − D funcionava em D = 15, 20? O modelo calibrado (K = 29,03) prevê que o tiro cai curto
+  (≈ 14,5 / 18,7). Dentro de D = 1…10 o erro máximo é 0,07 u.
   Jogadores usavam correções para distâncias longas?
 - **Resolve com:** memória do jogador; vídeo.
 
@@ -96,6 +105,13 @@ Toda pergunta tem um **default proposto** para não travar o trabalho. O default
 - **Pergunta:** polígonos (`Geometry2D.clip_polygons`) ou máscara de bitmap?
 - **Resolve com:** experimento técnico (desempenho, precisão da colisão por segmento) no marco do terreno.
 
+### OQ-22 · Ângulo acima de 90°
+- **Pergunta:** o jogo permitia mirar acima de 90° (ligeiramente para trás)? A regra `90 − D + 2·W` exige 91° em D = 1 com
+  vento a favor 1,0, em D = 2 com 1,5 e em D = 3 com 2,0. O simulador acerta esses tiros acima de 90°, mas se o jogo
+  travava em 90° o jogador precisaria de outra estratégia (virar de costas? reduzir força?).
+- **Default:** a física aceita qualquer ângulo; limites são regra da arma (WeaponDefinition, futuro).
+- **Resolve com:** memória do jogador.
+
 ### OQ-20 · Compensação de desnível vertical
 - **Pergunta:** como os jogadores corrigiam o desnível no Full Throw (regra de bolso, tipo "+1 de distância por X de altura")?
 - **Resolve com:** memória do jogador; depois, previsão pela nossa simulação para comparar.
@@ -122,3 +138,9 @@ Toda pergunta tem um **default proposto** para não travar o trabalho. O default
 ### OQ-21 · Técnica de 20°
 - **Pergunta:** força/regra. Sem dados. O modelo prevê fator de vento ≈ 0,31.
 - **Resolve com:** memória do jogador; tabela da comunidade.
+
+## RESOLVIDAS
+
+### OQ-18 · Infraestrutura de teste headless · resolvida em 06/10/2026
+- Runner próprio sem dependência externa + checagem estática com warnings de tipagem como erro (D-016).
+  Godot 4.7.1-stable. Comando: `tools/run_tests.sh`.

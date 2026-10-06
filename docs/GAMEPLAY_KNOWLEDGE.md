@@ -1,7 +1,7 @@
 # Conhecimento de gameplay
 
 Consolidação do que sabemos sobre o combate clássico de referência, separado por **tipo de evidência**.
-Última revisão: 06/10/2026.
+Última revisão: 06/10/2026 (Marco 1).
 
 ## Etiquetas de evidência
 
@@ -9,7 +9,7 @@ Consolidação do que sabemos sobre o combate clássico de referência, separado
 |---|---|
 | **PLAYER VERIFIED** | Vem da experiência direta do desenvolvedor jogando o DDTank clássico. Evidência empírica forte, mas aproximada: é memória de régua mental, não medição em pixel. |
 | **COMMUNITY RESEARCH** | Vem de guias e tabelas da comunidade ou de `research/DDTANK_DEEP_RESEARCH.md`. Hipótese até ser cruzada com outra fonte. |
-| **CALIBRATED** | Valor resolvido rodando a **nossa** simulação contra uma relação conhecida, com teste automatizado. *Nenhum item ainda.* |
+| **CALIBRATED** | Valor resolvido rodando a **nossa** simulação contra uma relação conhecida, com teste automatizado. Desde o Marco 1: K, razão do vento, invariância de timestep. |
 | **ENGINEERING INFERENCE** | Dedução matemática ou arquitetural nossa, com raciocínio documentado. Pode estar errada se as premissas estiverem. |
 | **UNKNOWN** | Não sabemos. Registrado em [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md). |
 
@@ -46,7 +46,10 @@ Consolidação do que sabemos sobre o combate clássico de referência, separado
   - Distância 10 → ângulo 80 · Distância 5 → ângulo 85 · Distância 3 → ângulo 87.
 - Reproduzir essa relação é objetivo central da simulação.
 
-**ENGINEERING INFERENCE** (detalhes em [PHYSICS_MODEL.md](PHYSICS_MODEL.md) §4)
+**CALIBRATED** (Marco 1, [PHYSICS_MODEL.md](PHYSICS_MODEL.md) §5)
+- O simulador reproduz `90 − D` (D = 1…10) com `K = v(95)²/g = 29,033 u`: erro médio 0,032 u, máximo 0,070 u (D = 10).
+
+**ENGINEERING INFERENCE** (derivação do Marco 0, apêndice do PHYSICS_MODEL)
 - Balística sem arrasto, em solo plano, gera `alcance = (v²/g)·sin(2θ)`. Com θ = 90 − D, `sin(2θ) = sin(2D)` ≈ linear
   para D pequeno. Ou seja, **a regra 90 − D surge naturalmente** de uma parábola com força fixa, desde que
   `v(95)²/g ≈ 28,6–29,0 unidades de distância`.
@@ -67,6 +70,11 @@ Consolidação do que sabemos sobre o combate clássico de referência, separado
 - Valores exibidos até cerca de 5,0.
 - Exemplo do high throw: D = 8, vento a favor 0,5 → 82 + 1 = 83. O sinal é coerente com o exemplo do jogador:
   vento a favor → **aumentar** ângulo; vento contra → **diminuir**.
+
+**CALIBRATED** (Marco 1, PHYSICS_MODEL §9–10)
+- Aceleração do vento por 1,0 = 0,034401·g. Correção medida no Full Throw: 1,976° (D = 3) a 2,035° (D = 10).
+- Com o mesmo modelo, sem ajuste: 30° → ×1,00 (bate com a comunidade); 65° → ×2,52 (comunidade: 2); 50° → sem solução por
+  ângulo com vento contra (comunidade: 2); 20° → ×0,30.
 
 **ENGINEERING INFERENCE**
 - Se o vento é uma aceleração horizontal constante `a_w = c·W·g`, então para ângulo fixo θ a correção em graus
@@ -97,8 +105,8 @@ Consolidação do que sabemos sobre o combate clássico de referência, separado
 **ENGINEERING INFERENCE**
 - O **formato** da tabela de 30° (alcance ∝ força^1,9) é compatível com velocidade inicial linear na força e
   alcance ∝ v². Isso apoia `initial_speed = power × power_scale`.
-- A **magnitude** da tabela de 30° não bate com a calibração do high throw: o modelo prevê 19 / 42 / 60
-  onde a tabela diz 14 / 32 / 47,5 (≈ 25% a menos). Ver OQ-04.
+- A **magnitude** da tabela de 30° não bate com a calibração do Full Throw: o simulador pede 18,95 / 42,36 / 59,91
+  onde a tabela diz 14 / 32 / 47,5 (razão 1,35 → 1,26). Ver OQ-04.
 
 ## 5. Outras técnicas de mira
 
@@ -108,7 +116,7 @@ Consolidação do que sabemos sobre o combate clássico de referência, separado
 
 **COMMUNITY RESEARCH** (baixa confiança, só `DDTANK_DEEP_RESEARCH.md`)
 - *Half Throw* (半抛): força ≈ 60, `Ângulo = 90 − 2·Distância ± vento`.
-  - Inferência: com velocidade linear na força, a regra 90 − 2D exige força ≈ 67, e não 60. **Conflito** (OQ-06).
+  - Simulador: a regra 90 − 2D pede força ≈ 68,5 (66,8–69,5), e não 60. **Conflito** (OQ-06).
 - *65°*: ângulo 65 ± 2·Vento; força por tabela.
 - *50°*: ângulo 50 ± 2·Vento; força por tabela.
 - *30°*: ângulo 30 ± Vento; força por tabela (acima).

@@ -8,7 +8,14 @@ com Força 95). Arte, personagens, mapas, armas, nomes e identidade serão próp
 
 ## Estado atual
 
-Fase 0: fundação documental. Ainda não há gameplay implementado. Veja [docs/PROGRESS.md](docs/PROGRESS.md).
+Marco 1 concluído: núcleo balístico headless (simulação determinística + calibração reproduzível + testes).
+Ainda não há gameplay visual. Veja [docs/PROGRESS.md](docs/PROGRESS.md) e [docs/PHYSICS_MODEL.md](docs/PHYSICS_MODEL.md).
+
+```bash
+export GODOT=/caminho/para/Godot        # opcional se estiver no PATH ou em /Applications
+tools/run_tests.sh                      # checagem estática + testes
+tools/ballistics/calibrate.sh           # relatório de calibração
+```
 
 ## Estrutura
 

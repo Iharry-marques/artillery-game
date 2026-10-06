@@ -1,6 +1,8 @@
 # Arquitetura (conceitual)
 
-> Apenas fronteiras e responsabilidades. **Nada disto está implementado.** Nomes de classes em inglês (código).
+> Fronteiras e responsabilidades. Nomes de classes em inglês (código).
+> **Implementado no Marco 1:** `GameMetrics`, `ProjectileSimulation` (+ estado, integrador, modelo de força, parâmetros,
+> resultado) e o solver inverso de mira. O restante é só desenho.
 > Última revisão: 06/10/2026.
 
 ## 1. Camadas
@@ -74,18 +76,27 @@ AimingSystem (ângulo, força) ─fire─▶ TurnManager ─▶ Projectile(node)
 - **Sinais para desacoplar.** Sistemas de jogo emitem eventos (`shot_fired`, `impacted`, `turn_changed`);
   a apresentação escuta.
 
-## 5. Mapeamento planejado de diretórios (`godot/`)
+## 5. Mapeamento de diretórios (`godot/`)
 
 ```
-scripts/core/          game_metrics.gd, weapon_definition.gd, projectile_simulation.gd,
-                       distance_measure.gd, aiming_technique.gd
-scripts/game/          projectile.gd, aiming_system.gd, wind_system.gd, character.gd, terrain.gd,
-                       explosion_system.gd, damage_system.gd, turn_manager.gd
-scripts/presentation/  camera_controller.gd, battle_hud.gd, minimap.gd
-assets/config/         game_metrics.tres, weapons/*.tres
-tests/                 testes headless (balística primeiro)
-scenes/                lab/ (Ballistics Lab), battle/
+scripts/core/game_metrics.gd           ✔ constantes centralizadas
+scripts/core/ballistics/               ✔ projectile_simulation, projectile_state, ballistic_integrator,
+                                         exact_kinematic_integrator, power_model, linear_power_model,
+                                         shot_parameters, ballistic_parameters, ballistic_result
+scripts/core/aiming/                   ✔ ballistic_solver (perguntas inversas, só previsão)
+                                         planejado: aiming_technique
+scripts/core/                          planejado: weapon_definition, distance_measure
+scripts/game/                          planejado: projectile, aiming_system, wind_system, character, terrain,
+                                         explosion_system, damage_system, turn_manager
+scripts/presentation/                  planejado: camera_controller, battle_hud, minimap
+config/                                ✔ game_metrics.tres; planejado: weapons/*.tres
+calibration/                           ✔ ballistic_evidence, ballistic_calibrator, calibrate (ferramenta, não jogo)
+tests/                                 ✔ run_tests.gd, support/, test_*.gd
+scenes/                                planejado: lab/ (Ballistics Lab), battle/
 ```
+
+`calibration/` e `tests/` dependem de `core/`; o `core/` não depende deles. Os dados de evidência
+(`BallisticEvidence`) nunca são lidos pela física.
 
 ## 6. Fora do escopo (decisão explícita necessária para entrar)
 

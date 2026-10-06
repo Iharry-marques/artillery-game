@@ -89,5 +89,11 @@ Stack: Godot 4.x · GDScript · simulação 2D · Blender 5.x LTS (mais tarde) �
 ## Ambiente
 
 - Raiz do repositório: `artillery-game/`. Raiz do projeto Godot: `godot/` (`res://` = `godot/`).
-- Em 06/10/2026, Godot e Blender **não** estavam instalados na máquina de desenvolvimento.
-  Atualize esta seção com o comando de execução headless dos testes quando o projeto Godot existir.
+- Godot 4.7.1-stable. Os scripts procuram `$GODOT`, depois `godot` no PATH, depois `/Applications` e `~/Applications`.
+  Na máquina atual o Godot está em `~/Downloads/Godot.app`: use
+  `export GODOT=~/Downloads/Godot.app/Contents/MacOS/Godot`.
+- **Testes (checagem estática + suíte headless):** `tools/run_tests.sh` (código ≠ 0 em qualquer falha).
+- **Calibração balística:** `tools/ballistics/calibrate.sh [--write-metrics]`. Nunca edite os valores calibrados de
+  `godot/config/game_metrics.tres` à mão.
+- Warnings de tipagem GDScript são erros (`project.godot`): todo código deve ser estaticamente tipado.
+- Blender não instalado (não é necessário antes da fase de arte).
