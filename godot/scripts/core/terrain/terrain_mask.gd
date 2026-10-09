@@ -65,6 +65,19 @@ func fill_rect(rect_units: Rect2) -> void:
 	version += 1
 
 
+## Marks the cells whose centres lie inside the axis-aligned ellipse as solid.
+func fill_ellipse(center_units: Vector2, radii_units: Vector2) -> void:
+	for row in rows:
+		var dy: float = ((row + 0.5) * cell_size - center_units.y) / radii_units.y
+		if absf(dy) > 1.0:
+			continue
+		for col in columns:
+			var dx: float = ((col + 0.5) * cell_size - center_units.x) / radii_units.x
+			if dx * dx + dy * dy <= 1.0:
+				_cells[row * columns + col] = 1
+	version += 1
+
+
 ## Removes the cells whose centres lie inside the circle. Returns the changed cell
 ## region (empty if nothing changed).
 func carve_circle(cx: float, cy: float, radius: float) -> Rect2i:

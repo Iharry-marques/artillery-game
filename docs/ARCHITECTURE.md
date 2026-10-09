@@ -156,3 +156,28 @@ Fluxo de dados: input → `CombatMatch.request_*` → `_fire()` roda a simulaç�
 `FLIGHT` avança `flight_elapsed` (as views fazem o playback) → `_resolve_impact()` cava a cratera e aplica dano
 (sinais `terrain_changed` e `impact_resolved` → views) → `_settle()` faz as quedas → `_end_turn()`.
 
+## 9. Battle Reference Clone (Marco 4)
+
+Mesma lógica da seção 8; só a apresentação mudou.
+
+```
+CombatSandbox (Node2D)
+├── Background (Node)            BattleBackground: céu + parallax manual em CanvasLayers
+├── World (Node2D)
+│   ├── TerrainView (Sprite2D)   shader terrain.gdshader sobre a máscara (r/g/b)
+│   ├── Player1, Player2         CombatantView = CharacterRoot
+│   │   ├── Visual (espelhado)   Body (sprite) · WeaponPivot → Weapon (sprite, gira no ângulo)
+│   │   └── Head                 HeadHitbox (marcador; desenhado pelo F2)
+│   ├── Projectile               sprite + rastro a partir das amostras
+│   ├── Explosion                flash, fogo, fumaça, detritos, números de dano
+│   ├── HitboxOverlay (F2)       hitbox × arte, pés, pivô, lançamento, vetor de mira
+│   ├── DebugOverlay (F3)
+│   └── BattleCamera             10 u; suavização por fase; zona morta; tremor visual
+└── Hud (CanvasLayer)            SandboxHud: cards, vento, minimapa, mostrador, força, status, banner
+```
+
+- `CharacterProxyArt` (`scripts/presentation/`) lê `proxy_meta.json` e os PNGs gerados por `tools/blender/`.
+- `MinimapProjection` (`scripts/presentation/`): transformação mundo→minimapa com uma única escala (testada).
+- Geometria de gameplay nova em `CombatantState`: `weapon_pivot_*`, `muzzle_*(angle)` (ponta do cano), `is_inside_head`.
+- `CombatWorldQuery` recebe o atirador para ignorar a própria cabeça até o projétil sair dela.
+

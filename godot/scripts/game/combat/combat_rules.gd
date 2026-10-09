@@ -17,16 +17,17 @@ const DEFAULT_PATH: String = "res://config/combat_rules.tres"
 @export var death_margin: float = 0.0
 
 @export_group("Character (ESTIMATED)")
+## HeadHitbox: the hittable circle. Matched to the proxy head art (tested).
 @export var head_radius: float = 0.0
 ## Height of the head centre above the FeetAnchor.
 @export var head_center_height: float = 0.0
-@export var body_width: float = 0.0
-@export var body_height: float = 0.0
 ## Half distance between the outer support probes under the feet.
 @export var foot_half_width: float = 0.0
-## Provisional launch point relative to the FeetAnchor (OQ-09): forward along facing, up.
-@export var muzzle_forward: float = 0.0
-@export var muzzle_up: float = 0.0
+## WeaponPivot (the gripping hand) relative to the FeetAnchor: forward along facing, up.
+@export var weapon_pivot_forward: float = 0.0
+@export var weapon_pivot_up: float = 0.0
+## Launch point = WeaponPivot + barrel length along the aim direction (OQ-09).
+@export var weapon_barrel_length: float = 0.0
 @export var starting_hp: int = 0
 
 @export_group("Movement (GAME DESIGN PLACEHOLDER)")
@@ -62,6 +63,10 @@ const DEFAULT_PATH: String = "res://config/combat_rules.tres"
 @export var flight_playback_speed: float = 1.0
 ## Exponential camera smoothing rate (1/s) when moving between framings.
 @export var camera_follow_rate: float = 0.0
+## Smoothing rate (1/s) while following the projectile.
+@export var camera_flight_rate: float = 0.0
+## Presentation-only camera shake on explosions, in u.
+@export var camera_shake_units: float = 0.0
 ## Active player's feet at this fraction of the view height (from the top).
 @export var turn_framing_fraction: float = 0.0
 

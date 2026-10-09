@@ -1,5 +1,9 @@
 # Combat Sandbox (Marco 3)
 
+> Desde o Marco 4 este sandbox tem apresentação de "reference clone" (personagens chibi, terreno texturizado, fundo,
+> efeitos, HUD clássico). Ver [REFERENCE_CLONE.md](REFERENCE_CLONE.md). As regras abaixo continuam valendo; os valores
+> atualizados de cabeça e lançamento estão na tabela.
+
 Primeira experiência **jogável**: dois personagens de debug num mapa procedural destrutível, turnos alternados
 no mesmo teclado (hot-seat). Não é produção: sem arte, sem itens, sem rede.
 
@@ -47,8 +51,8 @@ cabeça ou limite do mapa, via `CombatWorldQuery`.
 | Grupo | Valor | Observação |
 |---|---|---|
 | Mapa | 36 × 18 u; células de 0,05 u; chão em y = 12; spawns em x = 13 e 23 (10 u, uma tela); morte em y > 20 | |
-| Personagem | cabeça r = 0,25 u com centro 0,65 u acima dos pés; corpo 0,36 × 0,42 u (só visual); altura total ≈ 0,9 u (~16% da altura visível em 16:9) | Proporção de "cabeça grande" do gênero; não medido |
-| Cano (OQ-09) | 0,30 u à frente e 0,40 u acima dos pés | Geometria de gameplay; **não** recalibra a balística |
+| Personagem | cabeça r = 0,25 u com centro **0,72 u** acima dos pés (Marco 4, casada com a arte proxy); altura ≈ 1,08 u | Ver ART_DIRECTION_PROXY.md; não medido |
+| Lançamento (OQ-09) | ponta do cano: pivô 0,16 u à frente e 0,27 u acima dos pés + 0,45 u na direção da mira | Geometria de gameplay; **não** recalibra a balística |
 | HP | 100 | |
 | Movimento | 1,6 u/s; 4,0 u por turno; rampa máx. 50°; queda a 7 u/s | Sem stamina histórica, sem pulo |
 | Mira | 0–90°, passo 1°, inicial 60°, repetição a cada 0,07 s | |

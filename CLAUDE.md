@@ -107,4 +107,7 @@ Stack: Godot 4.x · GDScript · simulação 2D · Blender 5.x LTS (mais tarde) �
 - **Calibração balística:** `tools/ballistics/calibrate.sh [--write-metrics]`. Nunca edite os valores calibrados de
   `godot/config/game_metrics.tres` à mão.
 - Warnings de tipagem GDScript são erros (`project.godot`): todo código deve ser estaticamente tipado.
-- Blender não instalado (não é necessário antes da fase de arte).
+- Blender 4.5 LTS em `~/Applications/Blender.app` (os scripts procuram `$BLENDER`, PATH, `/Applications`,
+  `~/Applications`). Sprites proxy: `tools/blender/render_reference_character.sh`. Nunca edite os PNGs à mão; regere.
+- Um teste exige que a arte (`proxy_meta.json`) e `combat_rules.tres` concordem: cabeça/hitbox, pivô e cano. Ao mudar um,
+  mude o outro.

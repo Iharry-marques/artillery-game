@@ -59,7 +59,7 @@ func _draw_combatants(width: float) -> void:
 		var s: float = 6.0 / WorldCanvas.screen_scale(self)
 		draw_line(feet + Vector2(-s, 0), feet + Vector2(s, 0), ANCHOR_COLOR, width)
 		draw_line(feet + Vector2(0, -s), feet + Vector2(0, s), ANCHOR_COLOR, width)
-		draw_circle(WorldCanvas.to_canvas(c.muzzle_x(rules), c.muzzle_y(rules)), s * 0.5, ANCHOR_COLOR)
+		draw_circle(WorldCanvas.to_canvas(c.muzzle_x(rules, c.angle), c.muzzle_y(rules, c.angle)), s * 0.5, ANCHOR_COLOR)
 		WorldCanvas.draw_text(self, feet + Vector2(s, 2.5 * s), "feet (%.2f, %.2f)" % [c.feet_x, c.feet_y], ANCHOR_COLOR)
 	var a: CombatantState = combat.combatants[0]
 	var b: CombatantState = combat.combatants[1]

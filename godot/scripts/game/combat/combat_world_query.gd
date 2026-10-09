@@ -11,12 +11,19 @@ const TAG_BOUNDS: StringName = &"bounds"
 var _terrain: TerrainMask
 var _rules: CombatRules
 var _combatants: Array[CombatantState]
+## The shooter: its head is ignored while the projectile is still leaving it (a
+## steep barrel tip can start inside the shooter's own head). Afterwards it can
+## be hit like anyone else.
+var _shooter: CombatantState
+var _leaving_shooter: bool = false
 
 
-func _init(terrain: TerrainMask, rules: CombatRules, combatants: Array[CombatantState]) -> void:
+func _init(terrain: TerrainMask, rules: CombatRules, combatants: Array[CombatantState], shooter: CombatantState = null) -> void:
 	_terrain = terrain
 	_rules = rules
 	_combatants = combatants
+	_shooter = shooter
+	_leaving_shooter = shooter != null
 
 
 func first_hit(x0: float, y0: float, x1: float, y1: float) -> BallisticHit:
@@ -29,8 +36,10 @@ func first_hit(x0: float, y0: float, x1: float, y1: float) -> BallisticHit:
 		best_t = terrain_t
 		best_tag = TAG_TERRAIN
 
+	if _leaving_shooter and not _shooter.is_inside_head(_rules, x0, y0):
+		_leaving_shooter = false
 	for combatant in _combatants:
-		if not combatant.alive:
+		if not combatant.alive or (_leaving_shooter and combatant == _shooter):
 			continue
 		var head_t: float = segment_circle_hit(
 			x0, y0, x1, y1, combatant.head_center_x(), combatant.head_center_y(_rules), _rules.head_radius

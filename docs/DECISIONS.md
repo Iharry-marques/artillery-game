@@ -196,3 +196,46 @@ nova), **SUPERSEDED** (substituída). Decisões novas no fim.
 - **Decisão:** `WindGenerator` com semente fixa sorteia, a cada turno, um valor uniforme em ±2,0 com passo de 0,1. O
   toggle Z força 0, sem mudar a sequência sorteada.
 
+---
+
+## Marco 4: Battle Reference Clone
+
+### D-033 · Arte proxy procedural no Blender, sprites separados de corpo e arma · ACCEPTED · 09/10/2026
+- **Decisão:** um script `bpy` gera o personagem a partir de primitivas (cel shading por rampa de cor + contorno por casca
+  invertida), com câmera ortográfica **horizontal** a 256 px/u. Corpo (idle/mira × azul/vermelho), arma e projétil são
+  sprites separados; a arma gira no Godot no ângulo exato de jogo, sem dezenas de frames. O script grava
+  `proxy_meta.json` (âncoras, cabeça, pivô) e um teste exige que ele concorde com `combat_rules.tres`.
+- **Consequência:** pseudo-3D só pelo giro do corpo (vista 3/4); a arma é vista de lado. Blender 4.5 LTS (não 5.x).
+
+### D-034 · Terreno desenhado por shader sobre a máscara de colisão · ACCEPTED · 09/10/2026
+- **Decisão:** uma textura RGBA com um texel por célula (r = sólido agora, g = sólido original, b = chamuscado), filtro
+  linear e limiar 0,5 para contornos suaves. Grama, terra, contorno e chamuscado são calculados no shader. Craters só
+  regravam a região afetada.
+- **Consequência:** o visual pode diferir da colisão em até ~meia célula (0,025 u); a máscara segue como única fonte de verdade.
+
+### D-035 · Ponto de lançamento na ponta do cano · ACCEPTED · 09/10/2026
+- **Decisão:** lançamento = pivô (0,16/0,27 u) + 0,45 u na direção da mira, para o tiro sair visivelmente da arma. A
+  consulta de colisão ignora a cabeça do atirador **até o projétil sair dela** (tiros quase verticais começam dentro da
+  própria cabeça); depois disso, auto-acerto é possível.
+- **Consequência:** a balística calibrada não muda (OQ-09 continua aberta). Do spawn, o Full Throw carregado (95,3) acerta a cabeça.
+
+### D-036 · HeadHitbox alinhada à arte · ACCEPTED · 09/10/2026
+- **Decisão:** centro da hitbox 0,72 u (antes 0,65) e raio 0,25 u, contra a cabeça desenhada de 0,26 × 0,24 u. Tolerâncias
+  de teste: 0,02 u no centro e 0,03 u no raio médio. F2 mostra a hitbox e a cabeça desenhada juntas.
+
+### D-037 · Parallax manual em espaço de tela · ACCEPTED · 09/10/2026
+- **Contexto:** o `Parallax2D` posicionou as camadas fora do lugar (convenção de offset diferente da assumida).
+- **Decisão:** camadas desenhadas num CanvasLayer, deslocadas por `fator × movimento da câmera` em relação ao enquadramento
+  inicial. Determinístico e independente da resolução (escala pela altura da janela).
+
+### D-038 · Câmera com zona morta no voo e tremor de apresentação · ACCEPTED · 09/10/2026
+- **Decisão:** a câmera segue o projétil com suavização (9/s) e uma zona morta que o mantém dentro da área útil, acima do HUD.
+  No impacto, enquadra o ponto como um jogador. O tremor (0,08 u) é só visual. A largura de 10 u nunca muda.
+
+### D-039 · HUD na composição clássica de artilharia · ACCEPTED · 09/10/2026
+- **Decisão:**
+  - **Topo:** cards de jogador à esquerda, vento no centro (seta proporcional + número), minimapa à direita.
+  - **Base:** mostrador de ângulo (quarto de círculo, espelhado pelo facing) à esquerda, barra de força grande com marcas a
+    cada 10 e marcador do último tiro no centro, status/movimento/ajuda à direita.
+  - Banner de turno; F2 hitbox; F3 debug.
+

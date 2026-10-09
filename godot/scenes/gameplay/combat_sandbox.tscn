@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/game/sandbox/combat_sandbox.gd" id="1_sandbox"]
 [ext_resource type="Script" path="res://scripts/game/sandbox/terrain_view.gd" id="2_terrain"]
@@ -8,9 +8,14 @@
 [ext_resource type="Script" path="res://scripts/game/sandbox/sandbox_debug_overlay.gd" id="6_debug"]
 [ext_resource type="Script" path="res://scripts/game/sandbox/battle_camera.gd" id="7_camera"]
 [ext_resource type="Script" path="res://scripts/game/sandbox/sandbox_hud.gd" id="8_hud"]
+[ext_resource type="Script" path="res://scripts/game/sandbox/battle_background.gd" id="9_background"]
+[ext_resource type="Script" path="res://scripts/game/sandbox/sandbox_hitbox_overlay.gd" id="10_hitbox"]
 
 [node name="CombatSandbox" type="Node2D"]
 script = ExtResource("1_sandbox")
+
+[node name="Background" type="Node" parent="."]
+script = ExtResource("9_background")
 
 [node name="World" type="Node2D" parent="."]
 
@@ -28,6 +33,9 @@ script = ExtResource("4_projectile")
 
 [node name="Explosion" type="Node2D" parent="World"]
 script = ExtResource("5_explosion")
+
+[node name="HitboxOverlay" type="Node2D" parent="World"]
+script = ExtResource("10_hitbox")
 
 [node name="DebugOverlay" type="Node2D" parent="World"]
 script = ExtResource("6_debug")

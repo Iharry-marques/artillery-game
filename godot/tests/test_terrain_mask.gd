@@ -61,8 +61,8 @@ func test_support_query_and_overhangs() -> void:
 
 func test_procedural_map_is_deterministic() -> void:
 	var rules: CombatRules = CombatRules.load_default()
-	var a: TerrainMask = ProceduralTestMap.build(rules)
-	var b: TerrainMask = ProceduralTestMap.build(rules)
+	var a: TerrainMask = ReferenceBattleMap.build(rules)
+	var b: TerrainMask = ReferenceBattleMap.build(rules)
 	assert_true(a.solid_cell_count() == b.solid_cell_count(), "same map every time")
 	for spawn in rules.spawn_x:
 		assert_near(a.ground_below(spawn, 0.0), rules.ground_level_y, 1e-6, "spawn pad at ground level")

@@ -30,6 +30,8 @@ Nenhuma no momento. As duas que existiam foram reclassificadas no Marco 1:
   Precisa ser resolvida antes da implementação visual/de gameplay (personagem, terreno, Lab com alvos reais).
 - **Default proposto:** lançamento e medição de distância a partir do mesmo ponto de referência do personagem, com offset de
   cano zero. O Ballistics Lab (Marco 2) usa exatamente isso: atirador em (0, 0), sem hitbox e sem cano.
+- **Marco 4:** o lançamento passou para a ponta do cano (pivô 0,16/0,27 u + 0,45 u na direção da mira). A 80°, o tiro sai
+  ~0,24 u à frente e ~0,71 u acima dos pés. Do spawn, o Full Throw carregado na barra (95,3) acertou a cabeça; o contato foi em x = 23,21, com a cabeça centrada em 23,00.
 - **Combat Sandbox (Marco 3):** usa cano provisório de 0,30 u à frente e 0,40 u acima dos pés e mede D pé a pé. Efeito
   observado: o Full Throw cai ~0,3 u além do previsto pela calibração. Do spawn (D = 10, força exata 95) ainda acerta a
   cabeça, mas com D = 8,93 e o alvo 0,4 u mais baixo passou 0,34 u da cabeça (só splash). Se no jogo original a regra
@@ -94,10 +96,18 @@ Nenhuma no momento. As duas que existiam foram reclassificadas no Marco 1:
 - **Default:** arma de teste com 0–90°.
 - **Resolve com:** memória do jogador.
 
+### OQ-23 · Proporções do personagem e da cabeça
+- **Pergunta:** o personagem proxy (1,08 u, cabeça de 0,52 u, ~19% da altura da tela em 16:9) está na escala do jogo
+  clássico? A hitbox de raio 0,25 u parece justa?
+- **Evidência:** jogar o Reference Clone (F2 mostra hitbox × arte), memória do jogador, medição em vídeo (proporção
+  personagem/largura de tela).
+- **Status:** escolha REFERENCE PROXY / ESTIMATED, confiança LOW-MEDIUM; a pesquisa visual pública não trouxe referências utilizáveis.
+
 ### OQ-12 · Hitbox do personagem
 - **Pergunta:** largura e altura em u. A fonte estima ~0,45 × 0,75 u (LOW).
 - **Sandbox (Marco 3):** só a cabeça é atingível, um círculo de raio 0,25 u com centro 0,65 u acima dos pés; o corpo
   0,36 × 0,42 u é visual. ESTIMATED, a avaliar jogando.
+- **Marco 4:** centro subiu para 0,72 u, para casar com a cabeça da arte proxy (0,26 × 0,24 u). Ver OQ-23.
 - **Resolve com:** medição em vídeo relativa à largura da tela.
 
 ### OQ-13 · Explosão, cratera e dano

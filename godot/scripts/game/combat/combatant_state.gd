@@ -40,14 +40,28 @@ func head_center(rules: CombatRules) -> Vector2:
 	return Vector2(head_center_x(), head_center_y(rules))
 
 
-## Provisional launch point (OQ-09). The ballistic model itself is calibrated from
-## a point launch; this offset is gameplay geometry, not a recalibration.
-func muzzle_x(rules: CombatRules) -> float:
-	return feet_x + facing * rules.muzzle_forward
+func weapon_pivot_x(rules: CombatRules) -> float:
+	return feet_x + facing * rules.weapon_pivot_forward
 
 
-func muzzle_y(rules: CombatRules) -> float:
-	return feet_y - rules.muzzle_up
+func weapon_pivot_y(rules: CombatRules) -> float:
+	return feet_y - rules.weapon_pivot_up
+
+
+## Launch point: tip of the barrel at `angle_degrees` (OQ-09). The ballistic model
+## is calibrated from a point launch; this is gameplay geometry, not a recalibration.
+func muzzle_x(rules: CombatRules, angle_degrees: float) -> float:
+	return weapon_pivot_x(rules) + facing * rules.weapon_barrel_length * cos(deg_to_rad(angle_degrees))
+
+
+func muzzle_y(rules: CombatRules, angle_degrees: float) -> float:
+	return weapon_pivot_y(rules) - rules.weapon_barrel_length * sin(deg_to_rad(angle_degrees))
+
+
+func is_inside_head(rules: CombatRules, x: float, y: float) -> bool:
+	var dx: float = x - head_center_x()
+	var dy: float = y - head_center_y(rules)
+	return dx * dx + dy * dy <= rules.head_radius * rules.head_radius
 
 
 func apply_damage(amount: int) -> void:

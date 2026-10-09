@@ -4,6 +4,24 @@ Diário de engenharia. Entrada mais recente no topo.
 
 ---
 
+## 09/10/2026 · Marco 4: Battle Reference Clone
+
+**Feito**
+- Pipeline Blender procedural (`tools/blender/create_reference_character.py` + `render_reference_character.sh`): chibi
+  original com cel shading e contorno, variantes azul/vermelha, idle/mira, arma e projétil, `proxy_meta.json`.
+- Personagem no Godot como CharacterRoot (Visual/Body, WeaponPivot/Weapon girando no ângulo real, Head/HeadHitbox).
+  Hitbox subiu para 0,72 u, alinhada à arte (testado). Lançamento na ponta do cano; saída da própria cabeça tratada.
+- `ReferenceBattleMap`, shader de terreno (grama, terra, contorno, chamuscado), fundo em parallax manual, efeitos
+  (rastro, explosão, detritos, dano, flash, tremor), HUD na composição clássica, minimapa refeito, overlay F2.
+- Testes: 73 (62 anteriores + 11 novos: arte/escala/alinhamento, mira, minimapa, cena).
+- Revisão visual por `--capture` em janela real, com 7 problemas corrigidos (ver REFERENCE_CLONE.md). Calibração e
+  `game_metrics.tres` idênticos; Lab ok.
+
+**Não feito (de propósito)**
+- Arte final, multiplayer, itens, lojas, mascotes, atributos de RPG, ordem de turno por atraso.
+
+---
+
 ## 06/10/2026 · Marco 3: Combat Sandbox jogável
 
 **Revisão inicial:** árvore limpa, 34/34 testes, calibração reproduzível.

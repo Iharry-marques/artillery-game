@@ -96,16 +96,27 @@ Nenhum sobe de categoria por ter sido implementado. Detalhes e justificativas em
 | Métrica | Valor | Classe |
 |---|---|---|
 | Mapa | 36 × 18 u, células de 0,05 u, chão em y = 12, spawns em x = 13 / 23, morte em y > 20 | ESTIMATED (design) |
-| Cabeça (hitbox) | raio 0,25 u, centro 0,65 u acima dos pés | ESTIMATED |
-| Corpo (visual) | 0,36 × 0,42 u; sondas de suporte em ±0,12 u | ESTIMATED |
-| Cano (OQ-09) | 0,30 u à frente, 0,40 u acima dos pés | ESTIMATED |
+| Cabeça (hitbox) | raio 0,25 u, centro **0,72 u** acima dos pés (casada com a arte proxy, Marco 4) | ESTIMATED |
+| Sondas de suporte | ±0,12 u | ESTIMATED |
+| Lançamento (OQ-09) | ponta do cano: pivô 0,16 u à frente e 0,27 u acima dos pés + 0,45 u na direção da mira | ESTIMATED |
 | HP inicial | 100 | GAME DESIGN PLACEHOLDER |
 | Movimento | 1,6 u/s; 4,0 u/turno; rampa máx. 50°; queda 7 u/s | GAME DESIGN PLACEHOLDER |
 | Mira | 0–90°, passo 1°, inicial 60°, repetição 0,07 s | GAME DESIGN PLACEHOLDER (faixa: OQ-22) |
 | Carga de força | 0 → 100 em 2,5 s, linear, trava em 100 | ESTIMATED (OQ-10) |
 | Explosão | dano 35, raio de dano 1,0 u (queda linear), cratera 0,6 u | GAME DESIGN PLACEHOLDER |
 | Vento | uniforme ±2,0, passo 0,1, semente fixa, sorteio por turno | GAME DESIGN PLACEHOLDER (OQ-08) |
-| Fluxo/câmera | impacto 0,9 s; playback ×1; suavização 5/s; jogador a 60% da altura | GAME DESIGN PLACEHOLDER |
+| Fluxo/câmera | impacto 0,9 s; playback ×1; suavização 4/s (turno) e 9/s (voo); tremor 0,08 u; jogador a 58% da altura; zona morta no voo | GAME DESIGN PLACEHOLDER |
+| Mapa | `ReferenceBattleMap`: morros nas bordas, montinhos caminháveis entre spawns, vale à direita, ilha flutuante | ESTIMATED (design) |
+
+### Métricas de apresentação da arte proxy (REFERENCE PROXY, Marco 4)
+
+Não são constantes balísticas nem de gameplay. Detalhes em [ART_DIRECTION_PROXY.md](ART_DIRECTION_PROXY.md).
+
+| Métrica | Valor |
+|---|---|
+| Altura do personagem | 1,08 u (até o tufo; ≈ 1,0 u sem ele) |
+| Cabeça desenhada | 0,52 × 0,49 u (≈ 45% da altura total) |
+| Resolução de render | 256 px/u; corpo 320 × 320 px, arma 256 × 128 px, projétil 64 × 64 px |
 
 ## UNKNOWN
 

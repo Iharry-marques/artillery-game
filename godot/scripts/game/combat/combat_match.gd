@@ -63,7 +63,7 @@ func _init(p_metrics: GameMetrics, p_rules: CombatRules) -> void:
 ## the debug "force zero" toggle), turn.
 func reset() -> void:
 	force_zero_wind = false
-	terrain = ProceduralTestMap.build(rules)
+	terrain = ReferenceBattleMap.build(rules)
 	combatants.clear()
 	var center: float = rules.map_width * 0.5
 	for i in rules.spawn_x.size():
@@ -203,8 +203,8 @@ func snapshot() -> Dictionary:
 
 func _fire(angle: float, shot_power: float) -> void:
 	var shooter: CombatantState = active()
-	var shot := ShotParameters.new(angle, shot_power, wind, shooter.facing, shooter.muzzle_x(rules), shooter.muzzle_y(rules))
-	var query := CombatWorldQuery.new(terrain, rules, combatants)
+	var shot := ShotParameters.new(angle, shot_power, wind, shooter.facing, shooter.muzzle_x(rules, angle), shooter.muzzle_y(rules, angle))
+	var query := CombatWorldQuery.new(terrain, rules, combatants, shooter)
 	flight = ProjectileSimulation.simulate_with_collisions(shot, params, query, true)
 	last_shot_angle = angle
 	last_shot_power = shot_power

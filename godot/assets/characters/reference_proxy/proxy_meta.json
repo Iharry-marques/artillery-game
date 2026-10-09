@@ -1,0 +1,50 @@
+{
+  "generator": "tools/blender/create_reference_character.py",
+  "blender_version": "4.5.14 LTS",
+  "pixels_per_unit": 256,
+  "body": {
+    "size_px": [
+      320,
+      320
+    ],
+    "feet_anchor_px": [
+      160.0,
+      294.4
+    ],
+    "head_center_u": [
+      0.0,
+      0.72
+    ],
+    "head_visual_radius_u": [
+      0.26,
+      0.2444
+    ],
+    "approx_total_height_u": 1.081,
+    "weapon_pivot_u": [
+      0.16,
+      0.27
+    ],
+    "body_yaw_degrees": -35.0
+  },
+  "weapon": {
+    "size_px": [
+      256,
+      128
+    ],
+    "pivot_px": [
+      64.0,
+      64.0
+    ],
+    "barrel_length_u": 0.45
+  },
+  "projectile": {
+    "size_px": [
+      64,
+      64
+    ],
+    "center_px": [
+      32.0,
+      32.0
+    ]
+  }
+}
