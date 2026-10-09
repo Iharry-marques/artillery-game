@@ -1,0 +1,48 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/sandbox/combat_sandbox.gd" id="1_sandbox"]
+[ext_resource type="Script" path="res://scripts/game/sandbox/terrain_view.gd" id="2_terrain"]
+[ext_resource type="Script" path="res://scripts/game/sandbox/combatant_view.gd" id="3_combatant"]
+[ext_resource type="Script" path="res://scripts/game/sandbox/projectile_view.gd" id="4_projectile"]
+[ext_resource type="Script" path="res://scripts/game/sandbox/explosion_view.gd" id="5_explosion"]
+[ext_resource type="Script" path="res://scripts/game/sandbox/sandbox_debug_overlay.gd" id="6_debug"]
+[ext_resource type="Script" path="res://scripts/game/sandbox/battle_camera.gd" id="7_camera"]
+[ext_resource type="Script" path="res://scripts/game/sandbox/sandbox_hud.gd" id="8_hud"]
+
+[node name="CombatSandbox" type="Node2D"]
+script = ExtResource("1_sandbox")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="TerrainView" type="Sprite2D" parent="World"]
+script = ExtResource("2_terrain")
+
+[node name="Player1" type="Node2D" parent="World"]
+script = ExtResource("3_combatant")
+
+[node name="Player2" type="Node2D" parent="World"]
+script = ExtResource("3_combatant")
+
+[node name="Projectile" type="Node2D" parent="World"]
+script = ExtResource("4_projectile")
+
+[node name="Explosion" type="Node2D" parent="World"]
+script = ExtResource("5_explosion")
+
+[node name="DebugOverlay" type="Node2D" parent="World"]
+script = ExtResource("6_debug")
+
+[node name="BattleCamera" type="Camera2D" parent="World"]
+script = ExtResource("7_camera")
+
+[node name="Hud" type="CanvasLayer" parent="."]
+
+[node name="HudRoot" type="Control" parent="Hud"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_hud")

@@ -8,14 +8,17 @@ com Força 95). Arte, personagens, mapas, armas, nomes e identidade serão próp
 
 ## Estado atual
 
-Marco 2 concluído: **Ballistics Lab** visual sobre o núcleo balístico headless do Marco 1 (simulação determinística,
-calibração reproduzível e testes). Ainda não há cena de batalha. Veja [docs/PROGRESS.md](docs/PROGRESS.md),
+Marco 3 concluído: **Combat Sandbox jogável**. São dois personagens de debug num mapa destrutível: andar, mirar,
+carregar a força, atirar, cratera, dano, turnos e minimapa. Tudo roda sobre a balística calibrada do Marco 1. O
+Ballistics Lab (Marco 2) continua como ferramenta de engenharia. Veja
+[docs/COMBAT_SANDBOX.md](docs/COMBAT_SANDBOX.md), [docs/PROGRESS.md](docs/PROGRESS.md),
 [docs/PHYSICS_MODEL.md](docs/PHYSICS_MODEL.md) e [docs/BALLISTICS_LAB.md](docs/BALLISTICS_LAB.md).
 
 ```bash
 export GODOT=/caminho/para/Godot        # opcional se estiver no PATH ou em /Applications
 tools/run_tests.sh                      # checagem estática + testes
 tools/ballistics/calibrate.sh           # relatório de calibração
+tools/run_combat_sandbox.sh             # JOGAR: abre o Combat Sandbox (também F5 no editor)
 tools/run_ballistics_lab.sh             # abre o Ballistics Lab
 ```
 

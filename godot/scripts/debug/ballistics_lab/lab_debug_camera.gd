@@ -59,4 +59,4 @@ func _set_zoom(value: float) -> void:
 
 
 func _center_on(point_units: Vector2) -> void:
-	position = LabView.units_to_canvas(point_units)
+	position = WorldCanvas.units_to_canvas(point_units)

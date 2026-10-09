@@ -1,9 +1,10 @@
-class_name LabView
+class_name WorldCanvas
 extends RefCounted
-## Presentation-only helpers for the Ballistics Lab. Gameplay never reads this.
+## Presentation-only helpers shared by the Ballistics Lab and the combat sandbox.
+## Gameplay logic never reads this.
 ##
-## The Lab draws world units (u) at PIXELS_PER_UNIT canvas pixels per unit; the
-## camera zoom decides how many screen pixels that becomes.
+## World units (u) are drawn at PIXELS_PER_UNIT canvas pixels per unit; the camera
+## zoom decides how many screen pixels that becomes.
 
 const PIXELS_PER_UNIT: float = 100.0
 const FONT_SIZE: int = 13

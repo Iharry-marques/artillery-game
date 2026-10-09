@@ -2,7 +2,8 @@
 
 > Fronteiras e responsabilidades. Nomes de classes em inglês (código).
 > **Implementado no Marco 1:** `GameMetrics`, `ProjectileSimulation` (+ estado, integrador, modelo de força, parâmetros,
-> resultado) e o solver inverso de mira. **Marco 2:** Ballistics Lab (ferramenta de debug, seção 7). O restante é só desenho.
+> resultado) e o solver inverso de mira. **Marco 2:** Ballistics Lab (ferramenta de debug, seção 7). **Marco 3:** Combat
+> Sandbox jogável (seção 8): terreno, personagens, colisão, dano, turnos, câmera, HUD e minimapa em versão placeholder.
 > Última revisão: 06/10/2026.
 
 ## 1. Camadas
@@ -95,6 +96,12 @@ tests/                                 ✔ run_tests.gd, support/, test_*.gd
 scenes/                                planejado: lab/ (Ballistics Lab), battle/
 ```
 
+scripts/core/terrain/                  ✔ terrain_mask (grade de ocupação)
+scripts/game/combat/                   ✔ lógica pura de combate (seção 8)
+scripts/game/sandbox/                  ✔ nós do Combat Sandbox (seção 8)
+scripts/presentation/                  ✔ WorldCanvas, BattleViewFraming, TrajectoryPlayback (Lab + Sandbox)
+config/combat_rules.tres               ✔ placeholders de playtest (CombatRules)
+scenes/gameplay/combat_sandbox.tscn    ✔ cena principal
 scripts/debug/ballistics_lab/          ✔ Ballistics Lab (seção 7)
 scenes/debug/ballistics_lab.tscn       ✔ cena do Lab (cena principal do projeto por enquanto)
 
@@ -128,3 +135,24 @@ TrajectoryPlayback, BattleViewFraming, LabResultFormatter, LabView.
 - Helpers de mira só chamam `BallisticEvidence` / `BallisticSolver`.
 - A largura de 10 u vem de `GameMetrics.battle_view_width_units`; o zoom é derivado do tamanho do viewport do mundo.
 - `LabCapture` (`--capture=<dir>`) percorre cenários e câmeras, imprime os números e salva PNGs (revisão visual).
+
+## 8. Combat Sandbox (Marco 3)
+
+| Sistema planejado (seção 2) | Implementação no sandbox | Camada |
+|---|---|---|
+| Terrain | `TerrainMask` (core) + `ProceduralTestMap` + `TerrainView` | core / game / nó |
+| ProjectileSimulation + colisão | `simulate_with_collisions` + `BallisticCollisionQuery` → `CombatWorldQuery` | core / game |
+| Projectile | `ProjectileView` (playback das amostras; sem física própria) | nó |
+| Character | `CombatantState` + `CharacterMotor` + `CombatantView` | game / nó |
+| ExplosionSystem + DamageSystem | `CombatMatch._resolve_impact` + `DamageModel` + `ExplosionView` | game / nó |
+| WindSystem | `WindGenerator` | game |
+| AimingSystem | pedidos de `CombatMatch` (`request_angle_step`, `request_begin_charge`, `request_release`) | game |
+| TurnManager | `CombatMatch` (máquina de estados) | game |
+| CameraController | `BattleCamera` | nó |
+| BattleHUD / Minimap | `SandboxHud` / `SandboxMinimap` | nó |
+| — | `CombatSandbox` (input → pedidos, câmera, sinais → views), `SandboxDebugOverlay`, `SandboxCapture` | nó |
+
+Fluxo de dados: input → `CombatMatch.request_*` → `_fire()` roda a simulação inteira contra o mundo congelado →
+`FLIGHT` avança `flight_elapsed` (as views fazem o playback) → `_resolve_impact()` cava a cratera e aplica dano
+(sinais `terrain_changed` e `impact_resolved` → views) → `_settle()` faz as quedas → `_end_turn()`.
+

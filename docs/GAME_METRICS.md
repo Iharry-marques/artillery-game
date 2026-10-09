@@ -88,6 +88,25 @@ Mudam a **duração** do voo, não onde o tiro cai. Nenhum tem evidência de gam
 | Half Throw (90 − 2D): força | 68,5 (melhor ajuste) | ≈ 60 |
 | 30°: força D = 1 / 5 / 10 | 18,95 / 42,36 / 59,91 | 14 / 32 / 47,5 |
 
+## PLAYTEST PLACEHOLDERS (Marco 3, `godot/config/combat_rules.tres`)
+
+Valores **não históricos e não calibrados**, criados para o Combat Sandbox. Servem para o humano avaliar jogando.
+Nenhum sobe de categoria por ter sido implementado. Detalhes e justificativas em [COMBAT_SANDBOX.md](COMBAT_SANDBOX.md).
+
+| Métrica | Valor | Classe |
+|---|---|---|
+| Mapa | 36 × 18 u, células de 0,05 u, chão em y = 12, spawns em x = 13 / 23, morte em y > 20 | ESTIMATED (design) |
+| Cabeça (hitbox) | raio 0,25 u, centro 0,65 u acima dos pés | ESTIMATED |
+| Corpo (visual) | 0,36 × 0,42 u; sondas de suporte em ±0,12 u | ESTIMATED |
+| Cano (OQ-09) | 0,30 u à frente, 0,40 u acima dos pés | ESTIMATED |
+| HP inicial | 100 | GAME DESIGN PLACEHOLDER |
+| Movimento | 1,6 u/s; 4,0 u/turno; rampa máx. 50°; queda 7 u/s | GAME DESIGN PLACEHOLDER |
+| Mira | 0–90°, passo 1°, inicial 60°, repetição 0,07 s | GAME DESIGN PLACEHOLDER (faixa: OQ-22) |
+| Carga de força | 0 → 100 em 2,5 s, linear, trava em 100 | ESTIMATED (OQ-10) |
+| Explosão | dano 35, raio de dano 1,0 u (queda linear), cratera 0,6 u | GAME DESIGN PLACEHOLDER |
+| Vento | uniforme ±2,0, passo 0,1, semente fixa, sorteio por turno | GAME DESIGN PLACEHOLDER (OQ-08) |
+| Fluxo/câmera | impacto 0,9 s; playback ×1; suavização 5/s; jogador a 60% da altura | GAME DESIGN PLACEHOLDER |
+
 ## UNKNOWN
 
 Ver [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) para a evidência que resolveria cada item.

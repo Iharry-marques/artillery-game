@@ -23,11 +23,11 @@ func _process(_delta: float) -> void:
 
 
 func _draw() -> void:
-	var scale: float = LabView.screen_scale(self)
+	var scale: float = WorldCanvas.screen_scale(self)
 	var color: Color = SHOOTER_COLOR if kind == Kind.SHOOTER else TARGET_COLOR
 	var r: float = RADIUS_PX / scale
 	var width: float = LINE_WIDTH_PX / scale
-	var reach: float = REFERENCE_LINE_UNITS * LabView.PIXELS_PER_UNIT
+	var reach: float = REFERENCE_LINE_UNITS * WorldCanvas.PIXELS_PER_UNIT
 
 	draw_dashed_line(Vector2(0.0, -reach), Vector2(0.0, reach), color * Color(1, 1, 1, 0.25), 1.0 / scale, DASH_PX / scale)
 	draw_line(Vector2(-2.0 * r, 0.0), Vector2(2.0 * r, 0.0), color, width)
@@ -42,4 +42,4 @@ func _draw() -> void:
 		draw_polyline(PackedVector2Array([
 			Vector2(0.0, -r), Vector2(r, 0.0), Vector2(0.0, r), Vector2(-r, 0.0), Vector2(0.0, -r)
 		]), color, width)
-	LabView.draw_text(self, Vector2(1.4 * r, 2.4 * r), caption, color)
+	WorldCanvas.draw_text(self, Vector2(1.4 * r, 2.4 * r), caption, color)

@@ -9,6 +9,8 @@ enum Termination {
 	MAX_TIME,
 	## Started moving down without ever rising above the reference plane.
 	NO_ASCENT,
+	## A BallisticCollisionQuery reported a hit (see `hit`).
+	COLLISION,
 }
 
 var termination: Termination
@@ -26,6 +28,8 @@ var step_count: int
 var samples: PackedVector2Array = PackedVector2Array()
 ## Simulation time (s) of each entry in samples, same length. Used for playback.
 var sample_times: PackedFloat64Array = PackedFloat64Array()
+## Set when termination == COLLISION.
+var hit: BallisticHit
 
 
 func hit_plane() -> bool:

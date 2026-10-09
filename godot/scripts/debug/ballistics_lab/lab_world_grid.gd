@@ -30,9 +30,9 @@ func _process(_delta: float) -> void:
 
 
 func _draw() -> void:
-	var scale: float = LabView.screen_scale(self)
-	var rect: Rect2 = LabView.visible_canvas_rect(self)
-	var ppu: float = LabView.PIXELS_PER_UNIT
+	var scale: float = WorldCanvas.screen_scale(self)
+	var rect: Rect2 = WorldCanvas.visible_canvas_rect(self)
+	var ppu: float = WorldCanvas.PIXELS_PER_UNIT
 	var left: int = floori(rect.position.x / ppu)
 	var right: int = ceili(rect.end.x / ppu)
 	var top: int = floori(rect.position.y / ppu)
@@ -62,20 +62,20 @@ func _draw() -> void:
 
 
 func _draw_labels(rect: Rect2, scale: float, left: int, right: int, top: int, bottom: int) -> void:
-	var ppu: float = LabView.PIXELS_PER_UNIT
+	var ppu: float = WorldCanvas.PIXELS_PER_UNIT
 	var step: int = _label_step(scale)
 	var margin: float = 4.0 / scale
 	for i in range(left, right + 1):
 		if i % step == 0:
-			LabView.draw_text(self, Vector2(i * ppu + margin, rect.end.y - margin), "x %d" % i, LABEL_COLOR)
+			WorldCanvas.draw_text(self, Vector2(i * ppu + margin, rect.end.y - margin), "x %d" % i, LABEL_COLOR)
 	var x_label_band: float = LABEL_BAND_PX / scale
 	for j in range(top, bottom + 1):
 		if j % step == 0 and j * ppu < rect.end.y - x_label_band:
-			LabView.draw_text(self, Vector2(rect.position.x + margin, j * ppu - margin), "y %+d" % j if j != 0 else "y 0", LABEL_COLOR)
+			WorldCanvas.draw_text(self, Vector2(rect.position.x + margin, j * ppu - margin), "y %+d" % j if j != 0 else "y 0", LABEL_COLOR)
 
 
 func _label_step(scale: float) -> int:
-	var unit_on_screen_px: float = LabView.PIXELS_PER_UNIT * scale
+	var unit_on_screen_px: float = WorldCanvas.PIXELS_PER_UNIT * scale
 	for step in LABEL_STEPS:
 		if step * unit_on_screen_px >= MIN_LABEL_SPACING_PX:
 			return step

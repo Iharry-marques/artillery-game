@@ -55,6 +55,10 @@ Stack: Godot 4.x · GDScript · simulação 2D · Blender 5.x LTS (mais tarde) �
 - **Visualização nunca calcula trajetória.** Lab, câmera, playback e (futuramente) o jogo desenham amostras de
   `BallisticResult` produzidas por `ProjectileSimulation`. Física só em `scripts/core/ballistics/`.
 - Ferramentas de debug ficam em `scripts/debug/` e `scenes/debug/`, nunca dentro do core.
+- **Balística calibrada** (`GameMetrics`, `game_metrics.tres`) e **placeholders de playtest** (`CombatRules`,
+  `combat_rules.tres`) ficam em recursos separados. Sensação de jogo nunca recalibra K nem a razão do vento.
+- Colisão de gameplay entra na simulação só via `BallisticCollisionQuery`; o core não conhece terreno nem personagens.
+- Geometria de gameplay usa escalares de 64 bits; `Vector2`/`Rect2` (32 bits) só para desenho.
 - **Não adicione networking nem backend** antes de haver decisão explícita registrada em DECISIONS.md.
 
 ## Regras de assets
@@ -96,7 +100,9 @@ Stack: Godot 4.x · GDScript · simulação 2D · Blender 5.x LTS (mais tarde) �
   Na máquina atual o Godot está em `~/Downloads/Godot.app`: use
   `export GODOT=~/Downloads/Godot.app/Contents/MacOS/Godot`.
 - **Testes (checagem estática + suíte headless):** `tools/run_tests.sh` (código ≠ 0 em qualquer falha).
-- **Ballistics Lab:** `tools/run_ballistics_lab.sh` (F5 no editor também abre). `--capture=<dir absoluto>` salva
+- **Combat Sandbox (jogável, cena principal):** `tools/run_combat_sandbox.sh`; `--capture=<dir absoluto>` joga uma
+  partida roteirizada com screenshots (revisão visual) e fecha.
+- **Ballistics Lab:** `tools/run_ballistics_lab.sh`. `--capture=<dir absoluto>` salva
   screenshots de todos os cenários e fecha; use isso para revisar mudanças visuais.
 - **Calibração balística:** `tools/ballistics/calibrate.sh [--write-metrics]`. Nunca edite os valores calibrados de
   `godot/config/game_metrics.tres` à mão.

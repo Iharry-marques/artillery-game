@@ -94,7 +94,7 @@ func recompute() -> void:
 	_renderer.show_result(setup, result)
 	_shooter.facing = setup.facing
 	_shooter.caption = "shooter (0, 0)"
-	_target.position = LabView.to_canvas(setup.target_x(), setup.target_y())
+	_target.position = WorldCanvas.to_canvas(setup.target_x(), setup.target_y())
 	_target.caption = "target (%.2f, %+.2f)" % [setup.target_x(), setup.target_y()]
 	_playback.load_result(result, camera_mode == LabDebugCamera.Mode.FOLLOW)
 	_update_camera()

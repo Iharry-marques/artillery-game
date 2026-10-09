@@ -4,6 +4,29 @@ Diário de engenharia. Entrada mais recente no topo.
 
 ---
 
+## 06/10/2026 · Marco 3: Combat Sandbox jogável
+
+**Revisão inicial:** árvore limpa, 34/34 testes, calibração reproduzível.
+
+**Feito**
+- `scenes/gameplay/combat_sandbox.tscn` (cena principal): mover, mirar, carregar, atirar, câmera seguindo o projétil,
+  cratera, dano, queda, turno alternado, fim de partida e reset (R). `tools/run_combat_sandbox.sh` (+ `--capture`).
+- Núcleo: `BallisticCollisionQuery`, `BallisticHit`, `simulate_with_collisions` (mesma trajetória, término por colisão),
+  `TerrainMask`.
+- Lógica pura em `scripts/game/combat/` e nós em `scripts/game/sandbox/`; auxiliares de apresentação movidos para
+  `scripts/presentation/` (Lab atualizado).
+- Placeholders centralizados em `combat_rules.tres`; `docs/COMBAT_SANDBOX.md`.
+- Testes: 62 (34 anteriores + 28 novos: terreno, colisão, dano, turnos, queda, vento, reset).
+- Bugs encontrados e corrigidos: geometria da cabeça em float32 (5e-8 u de erro, agora escalares de 64 bits); a partida
+  não terminava se o jogador inativo morresse fora do turno; o reset não limpava o toggle de vento 0.
+- Verificação jogável por captura automática numa janela real (Full Throw carregado na barra, voo, impacto, resposta
+  do P2, cratera e queda, partida até HP 0, overlay, reset). Calibração byte a byte idêntica; Lab ok.
+
+**Não feito (de propósito)**
+- Blender, arte final, itens, atributos de RPG, ordem de turno por delay, rede, backend.
+
+---
+
 ## 06/10/2026 · Marco 2: Ballistics Lab visual
 
 **Revisão inicial**

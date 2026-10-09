@@ -5,6 +5,7 @@ Ferramentas de engenharia fora do runtime do jogo.
 | Diretório | Propósito |
 |---|---|
 | `ballistics/` | `calibrate.sh [--write-metrics]`: roda a calibração GDScript (`godot/calibration/`) e grava `reports/calibration_report.md` (D-015). |
+| `run_combat_sandbox.sh` | Abre o Combat Sandbox jogável; `--capture=<dir absoluto>` joga uma partida roteirizada com screenshots e fecha. |
 | `run_ballistics_lab.sh` | Abre o Ballistics Lab; `--capture=<dir absoluto>` salva screenshots de todos os cenários e fecha. |
 | `run_tests.sh` | Checagem estática de todo GDScript + suíte headless. Código ≠ 0 em qualquer falha (D-016). |
 | `lib/godot.sh` | Localiza o Godot (`$GODOT`, PATH, `/Applications`, `~/Applications`) e roda scripts headless detectando erros. |

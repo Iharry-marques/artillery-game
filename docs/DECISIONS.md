@@ -143,3 +143,56 @@ nova), **SUPERSEDED** (substituída). Decisões novas no fim.
 ### D-024 · Revisão visual por captura automática · ACCEPTED · 06/10/2026
 - **Decisão:** `tools/run_ballistics_lab.sh --capture=<dir>` gera screenshots e números de todos os cenários. É a forma
   padrão de o agente revisar mudanças visuais. Screenshots ficam fora do repositório.
+
+---
+
+## Marco 3: Combat Sandbox jogável
+
+### D-025 · Terreno como máscara de ocupação em grade · ACCEPTED · 06/10/2026
+- **Contexto:** precisamos de consulta sólido/vazio, crateras circulares, overhangs, suporte sob os pés e colisão de
+  segmento rápida e sem tunelamento, tudo determinístico.
+- **Alternativas:** polígonos com `Geometry2D.clip_polygons` (cada cratera aumenta os vértices, buracos são incômodos,
+  robustez numérica cai com muitas operações); `CollisionPolygon2D` gerado (acoplado ao motor de física, caro de
+  regenerar); máscara de bitmap.
+- **Decisão:** `TerrainMask`, uma grade de células de 0,05 u em `PackedByteArray`. Consultas O(1), cratera = limpar
+  células num círculo, colisão por travessia exata de células (Amanatides-Woo), suporte por varredura de coluna. O
+  visual é uma textura com um texel por célula, atualizada a cada cratera. Terreno solto não cai (sem física de terreno).
+- **Consequência:** a resolução limita a forma (bordas em degraus de 0,05 u). É fácil trocar o mapa e o visual.
+
+### D-026 · Colisão de gameplay fora do core balístico · ACCEPTED · 06/10/2026
+- **Decisão:** `ProjectileSimulation.simulate_with_collisions(shot, params, query)` usa a mesma integração do
+  `simulate_to_plane` e pergunta a um `BallisticCollisionQuery` abstrato o que o segmento entre dois estados atinge. O
+  `CombatWorldQuery` (camada de jogo) combina terreno, cabeças vivas e limites, e o contato mais próximo vence. O impacto
+  é o ponto de contato no segmento (corda de ≤ 1/60 s, a ≤ ~2,5e-4 u da parábola).
+- **Consequência:** a calibração continua byte a byte idêntica. Um teste confirma que, com piso plano, o Full Throw cai
+  no mesmo ponto do modelo de plano (dentro de uma célula).
+
+### D-027 · Personagem por FeetAnchor, suporte por sondas, queda determinística · ACCEPTED · 06/10/2026
+- **Decisão:** a posição estável é a FeetAnchor. Andar segue a superfície em sub-passos de meia célula, sobe até
+  `max_slope_degrees`, para em paredes e cai de beiradas. O suporte é a maior altura entre três sondas sob os pés. A
+  queda é a velocidade constante até o suporte ou a linha de morte (HP 0). Não há pulo nem corpo rígido.
+- **Hitbox:** só a cabeça (círculo) é atingível; o corpo é visual. Não há multiplicador de headshot.
+
+### D-028 · Placeholders de playtest num recurso separado · ACCEPTED · 06/10/2026
+- **Decisão:** `CombatRules` (`combat_rules.tres`) guarda tudo o que é sensação de jogo: dimensões, movimento, carga,
+  dano, vento e câmera. `GameMetrics` continua só com a balística. Todos os valores são ESTIMATED ou GAME DESIGN
+  PLACEHOLDER (GAME_METRICS).
+
+### D-029 · Lógica de combate pura, cena só como casca · ACCEPTED · 06/10/2026
+- **Decisão:** `CombatMatch` (máquina de estados) e o resto de `scripts/game/combat/` não usam nós. A cena traduz input
+  em pedidos (`request_move`, `request_begin_charge`...), e pedidos fora de hora ou do jogador inativo são recusados.
+  Isso permite testar turnos, travas, queda, vento e reset em headless.
+- **Reset** restaura o estado inicial exato, inclusive o toggle de vento 0.
+
+### D-030 · Auxiliares de apresentação compartilhados · ACCEPTED · 06/10/2026
+- **Decisão:** `WorldCanvas` (ex-`LabView`), `BattleViewFraming` e `TrajectoryPlayback` passaram a ficar em
+  `scripts/presentation/`, usados pelo Lab e pelo Sandbox.
+
+### D-031 · Sandbox como cena principal; Full Throw automático só como debug · PROVISIONAL · 06/10/2026
+- **Decisão:** `run/main_scene` passa a ser o Combat Sandbox. A tecla F dispara a regra do Full Throw (evidência) no
+  oponente, sinalizada como DEBUG; a captura automática usa o `BallisticSolver` para garantir acertos.
+
+### D-032 · Vento provisório reprodutível · PROVISIONAL · 06/10/2026
+- **Decisão:** `WindGenerator` com semente fixa sorteia, a cada turno, um valor uniforme em ±2,0 com passo de 0,1. O
+  toggle Z força 0, sem mudar a sequência sorteada.
+

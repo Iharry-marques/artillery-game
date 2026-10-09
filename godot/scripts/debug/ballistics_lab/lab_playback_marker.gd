@@ -65,10 +65,10 @@ func _process(delta: float) -> void:
 
 
 func _sync_position() -> void:
-	position = LabView.units_to_canvas(position_units())
+	position = WorldCanvas.units_to_canvas(position_units())
 
 
 func _draw() -> void:
-	var scale: float = LabView.screen_scale(self)
+	var scale: float = WorldCanvas.screen_scale(self)
 	draw_circle(Vector2.ZERO, RADIUS_PX / scale, COLOR)
 	draw_arc(Vector2.ZERO, (RADIUS_PX + 3.0) / scale, 0.0, TAU, 24, COLOR * Color(1, 1, 1, 0.5), 1.5 / scale)

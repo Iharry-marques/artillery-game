@@ -30,6 +30,10 @@ Nenhuma no momento. As duas que existiam foram reclassificadas no Marco 1:
   Precisa ser resolvida antes da implementação visual/de gameplay (personagem, terreno, Lab com alvos reais).
 - **Default proposto:** lançamento e medição de distância a partir do mesmo ponto de referência do personagem, com offset de
   cano zero. O Ballistics Lab (Marco 2) usa exatamente isso: atirador em (0, 0), sem hitbox e sem cano.
+- **Combat Sandbox (Marco 3):** usa cano provisório de 0,30 u à frente e 0,40 u acima dos pés e mede D pé a pé. Efeito
+  observado: o Full Throw cai ~0,3 u além do previsto pela calibração. Do spawn (D = 10, força exata 95) ainda acerta a
+  cabeça, mas com D = 8,93 e o alvo 0,4 u mais baixo passou 0,34 u da cabeça (só splash). Se no jogo original a regra
+  acertava "no centro", o lançamento provavelmente ficava mais perto da referência de medição.
 - **Resolve com:** medição em vídeo (de onde o projétil aparece) + decisão de design.
 
 ### OQ-01 · Tempo de voo do Full Throw
@@ -77,6 +81,8 @@ Nenhuma no momento. As duas que existiam foram reclassificadas no Marco 1:
 - **Resolve com:** memória do jogador; vídeo.
 
 ### OQ-10 · Barra de força
+- **Sandbox (Marco 3):** 0 → 100 em 2,5 s, linear, trava em 100. A 60 fps cada frame soma ~0,67 de força, e a 10 u de
+  distância isso desloca o impacto ~0,14 u. Na captura automática a carga real parou em 95,68.
 - **Pergunta:** tempo de carga 0 → 100, comportamento ao passar de 100 (trava? volta a 0? oscila?).
 - **Default:** linear, 0 → 100 em 2,5 s; ao estourar, volta a 0 (fonte COMMUNITY).
 - **Resolve com:** memória do jogador; vídeo.
@@ -90,10 +96,14 @@ Nenhuma no momento. As duas que existiam foram reclassificadas no Marco 1:
 
 ### OQ-12 · Hitbox do personagem
 - **Pergunta:** largura e altura em u. A fonte estima ~0,45 × 0,75 u (LOW).
+- **Sandbox (Marco 3):** só a cabeça é atingível, um círculo de raio 0,25 u com centro 0,65 u acima dos pés; o corpo
+  0,36 × 0,42 u é visual. ESTIMATED, a avaliar jogando.
 - **Resolve com:** medição em vídeo relativa à largura da tela.
 
 ### OQ-13 · Explosão, cratera e dano
 - **Pergunta:** raio de dano, raio de cratera, curva de decaimento, dano base.
+- **Sandbox (Marco 3):** placeholder com dano 35, raio de dano 1,0 u (queda linear até a borda da cabeça) e cratera
+  0,6 u. Uma cratera centrada na cabeça não alcança o chão. **Não** é a fórmula histórica.
 - **Resolve com:** vídeo + decisão de design (fidelidade baixa aceitável).
 
 ### OQ-14 · Ordem de turno
@@ -102,8 +112,7 @@ Nenhuma no momento. As duas que existiam foram reclassificadas no Marco 1:
 - **Resolve com:** memória do jogador + decisão de produto.
 
 ### OQ-15 · Representação do terreno
-- **Pergunta:** polígonos (`Geometry2D.clip_polygons`) ou máscara de bitmap?
-- **Resolve com:** experimento técnico (desempenho, precisão da colisão por segmento) no marco do terreno.
+- **Resolvida no Marco 3:** máscara de ocupação em grade (D-025).
 
 ### OQ-22 · Ângulo acima de 90°
 - **Pergunta:** o jogo permitia mirar acima de 90° (ligeiramente para trás)? A regra `90 − D + 2·W` exige 91° em D = 1 com
@@ -128,6 +137,8 @@ Nenhuma no momento. As duas que existiam foram reclassificadas no Marco 1:
 - **Resolve com:** pesquisa externa.
 
 ### OQ-16 · Movimento
+- **Sandbox (Marco 3):** 1,6 u/s, 4 u por turno, rampa máx. 50°, sem pulo. O morro central (~53°) bloqueia a passagem,
+  e paredes de cratera podem prender um personagem. Avaliar jogando.
 - **Pergunta:** velocidade, stamina por turno, inclinação máxima (~45° segundo a fonte), ausência de pulo.
 - **Resolve com:** vídeo + decisão de design.
 

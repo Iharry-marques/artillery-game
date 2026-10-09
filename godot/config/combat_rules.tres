@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="CombatRules" format=3]
+
+[ext_resource type="Script" path="res://scripts/game/combat/combat_rules.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+map_width = 36.0
+map_height = 18.0
+terrain_cell_size = 0.05
+ground_level_y = 12.0
+spawn_x = PackedFloat64Array(13, 23)
+death_margin = 2.0
+head_radius = 0.25
+head_center_height = 0.65
+body_width = 0.36
+body_height = 0.42
+foot_half_width = 0.12
+muzzle_forward = 0.3
+muzzle_up = 0.4
+starting_hp = 100
+move_speed = 1.6
+movement_budget = 4.0
+max_slope_degrees = 50.0
+fall_speed = 7.0
+angle_min = 0
+angle_max = 90
+initial_angle = 60
+angle_repeat_interval = 0.07
+power_charge_time = 2.5
+power_max = 100.0
+base_damage = 35.0
+damage_radius = 1.0
+crater_radius = 0.6
+wind_max = 2.0
+wind_step = 0.1
+wind_seed = 20261006
+impact_hold_time = 0.9
+flight_playback_speed = 1.0
+camera_follow_rate = 5.0
+turn_framing_fraction = 0.6
