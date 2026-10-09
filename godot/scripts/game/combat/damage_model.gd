@@ -16,7 +16,7 @@ static func damage_at_distance(rules: CombatRules, distance: float) -> int:
 static func distance_to_head(rules: CombatRules, combatant: CombatantState, x: float, y: float) -> float:
 	var dx: float = x - combatant.head_center_x()
 	var dy: float = y - combatant.head_center_y(rules)
-	return maxf(0.0, sqrt(dx * dx + dy * dy) - rules.head_radius)
+	return maxf(0.0, sqrt(dx * dx + dy * dy) - combatant.head_radius)
 
 
 static func damage_to(rules: CombatRules, combatant: CombatantState, x: float, y: float) -> int:

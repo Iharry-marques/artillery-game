@@ -239,3 +239,38 @@ nova), **SUPERSEDED** (substituída). Decisões novas no fim.
     cada 10 e marcador do último tiro no centro, status/movimento/ajuda à direita.
   - Banner de turno; F2 hitbox; F3 debug.
 
+### D-040 · Estratégia de produto: Reference Clone navegável offline · ACCEPTED · 09/10/2026
+- **Decisão:** a partir do Marco 5 o jogo é desenvolvido como um produto navegável completo (cidade, bolsa, ferreiro, loja,
+  salão, salas, PvP, PvE, resultado), usando o fluxo clássico de jogos de artilharia como **referência funcional**. Todo
+  conteúdo é original; nenhum asset, nome ou marca de terceiros.
+- **Consequência:** sistemas de produto ficam em `scripts/meta/` (domínio headless) e `scripts/shell/` (telas). Ver
+  [PRODUCT_SHELL.md](PRODUCT_SHELL.md).
+
+### D-041 · Sem backend: salas, jogadores e social simulados localmente · ACCEPTED · 09/10/2026
+- **Decisão:** salas, oponentes, ranking, guilda e amigos são gerados localmente; oponentes são IA. Não há login,
+  pagamento real nem rede. Gold, Coupons e Vouchers são moedas locais de teste.
+- **Consequência:** a regra "sem networking/backend" continua valendo; abrir rede exige nova decisão.
+
+### D-042 · GameSession estático e save JSON local · ACCEPTED · 09/10/2026
+- **Decisão:** `GameSession` é um singleton estático (não autoload) com `replace_instance()` para testes; o perfil é salvo
+  em `user://reference_clone_save.json` após cada ação que o altera. RNG do perfil determinístico (semente + contador).
+- **Por quê:** testável headless, sem dependência de árvore de cena; reabrir o jogo restaura a progressão.
+
+### D-043 · Uma cena de batalha para sandbox, PvP e PvE · ACCEPTED · 09/10/2026
+- **Decisão:** `combat_sandbox.tscn` entra em modo batalha quando existe `GameSession.pending_battle` (`BattleSetup`);
+  sem isso continua o sandbox hot-seat. `CombatMatch` aceita times, loadouts com atributos, inimigos e estágios.
+- **Por quê:** a física, a câmera, o HUD e os efeitos já validados são reaproveitados sem cópia.
+
+### D-044 · IA joga pelas mesmas requisições do humano · ACCEPTED · 09/10/2026
+- **Decisão:** `AiTurnDriver` usa face/ângulo/carga/soltar/mover/golpe; `ArtilleryPlanner` resolve o tiro com
+  `BallisticSolver` e aplica erro gaussiano (1,8° oponentes, 1,5° aliado). A trajetória é sempre a da simulação.
+
+### D-045 · Fórmulas de RPG como REFERENCE ESTIMATE · ACCEPTED · 09/10/2026
+- **Decisão:** atributos, HP, dano, crítico, EXP, fortalecimento, recompensas e dificuldade usam fórmulas declaradas em
+  [PRODUCT_SHELL.md](PRODUCT_SHELL.md), classificadas como estimativa de engenharia, e centralizadas em scripts de regra
+  (`character_stats.gd`, `damage_formula.gd`, `enhancement_rules.gd`, `reward_calculator.gd`, `progression.gd`).
+
+### D-046 · Janela e escala da UI · ACCEPTED · 09/10/2026
+- **Decisão:** viewport de referência 1600×900, janela inicial 1440×810 redimensionável, stretch `canvas_items`/`expand`;
+  F11/Alt+Enter alternam tela cheia. A câmera de batalha continua com 10 u de largura (D-002).
+

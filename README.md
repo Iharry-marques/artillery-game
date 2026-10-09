@@ -8,9 +8,10 @@ com Força 95). Arte, personagens, mapas, armas, nomes e identidade serão próp
 
 ## Estado atual
 
-Marco 4 concluído: **Battle Reference Clone**. É a batalha jogável com personagens chibi proxy (Blender procedural),
-terreno texturizado, fundo em parallax, efeitos e HUD na composição clássica de artilharia, tudo sobre a mesma balística
-calibrada. Veja [docs/REFERENCE_CLONE.md](docs/REFERENCE_CLONE.md),
+Marco 5 concluído: **Product Shell**. O jogo é um produto navegável offline: cidade, bolsa, status, ferreiro, loja,
+salão de jogos, salas, batalha PvP contra IA, expedição PvE com chefe, resultado com recompensas e progressão salva
+localmente. Veja [docs/PRODUCT_SHELL.md](docs/PRODUCT_SHELL.md). A batalha (Marco 4) segue com a mesma balística
+calibrada: [docs/REFERENCE_CLONE.md](docs/REFERENCE_CLONE.md),
 [docs/ART_DIRECTION_PROXY.md](docs/ART_DIRECTION_PROXY.md), [docs/COMBAT_SANDBOX.md](docs/COMBAT_SANDBOX.md),
 [docs/PROGRESS.md](docs/PROGRESS.md),
 [docs/PHYSICS_MODEL.md](docs/PHYSICS_MODEL.md) e [docs/BALLISTICS_LAB.md](docs/BALLISTICS_LAB.md).
@@ -19,7 +20,9 @@ calibrada. Veja [docs/REFERENCE_CLONE.md](docs/REFERENCE_CLONE.md),
 export GODOT=/caminho/para/Godot        # opcional se estiver no PATH ou em /Applications
 tools/run_tests.sh                      # checagem estática + testes
 tools/ballistics/calibrate.sh           # relatório de calibração
-tools/run_combat_sandbox.sh             # JOGAR: abre o Combat Sandbox (também F5 no editor)
+tools/run_game.sh                       # JOGAR: tela inicial -> cidade (também F5 no editor)
+tools/run_shell_capture.sh /dir/abs     # revisão visual das telas + PvP + PvE (IA joga)
+tools/run_combat_sandbox.sh             # sandbox de batalha hot-seat (ferramentas de debug)
 tools/run_ballistics_lab.sh             # abre o Ballistics Lab
 tools/blender/render_reference_character.sh   # regera os sprites proxy (Blender)
 ```

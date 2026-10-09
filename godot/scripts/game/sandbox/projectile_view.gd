@@ -45,5 +45,7 @@ func _draw() -> void:
 	var heading: float = (head - before).angle() if head.distance_to(before) > 0.0001 else 0.0
 	var sprite_scale: float = art.sprite_scale()
 	draw_set_transform(head, heading, Vector2.ONE * sprite_scale)
-	draw_texture(art.projectile, -art.projectile_center_px)
+	var key: StringName = combat.active().loadout.projectile_art if combat.active().loadout != null else &"shell"
+	var texture: Texture2D = art.projectile_texture(key)
+	draw_texture(texture, -texture.get_size() * 0.5 if key != &"shell" else -art.projectile_center_px)
 	draw_set_transform_matrix(Transform2D.IDENTITY)

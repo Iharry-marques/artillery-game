@@ -1,0 +1,51 @@
+{
+  "generator": "tools/blender/create_reference_enemies.py",
+  "pixels_per_unit": 256,
+  "enemies": {
+    "sprout_grunt": {
+      "size_px": [
+        256,
+        256
+      ],
+      "feet_anchor_px": [
+        128.0,
+        243.2
+      ],
+      "head_center_u": [
+        0.0,
+        0.42
+      ],
+      "head_radius_u": 0.3
+    },
+    "pebble_slinger": {
+      "size_px": [
+        320,
+        320
+      ],
+      "feet_anchor_px": [
+        160.0,
+        299.52
+      ],
+      "head_center_u": [
+        0.0,
+        0.62
+      ],
+      "head_radius_u": 0.3
+    },
+    "shell_king": {
+      "size_px": [
+        666,
+        666
+      ],
+      "feet_anchor_px": [
+        332.8,
+        640.0
+      ],
+      "head_center_u": [
+        0.0,
+        1.3
+      ],
+      "head_radius_u": 0.72
+    }
+  }
+}

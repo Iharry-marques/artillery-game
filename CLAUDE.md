@@ -91,6 +91,7 @@ Stack: Godot 4.x · GDScript · simulação 2D · Blender 5.x LTS (mais tarde) �
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Fronteiras dos sistemas |
 | [docs/DECISIONS.md](docs/DECISIONS.md) | Registro de decisões |
 | [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md) | Perguntas em aberto e como resolvê-las |
+| [docs/PRODUCT_SHELL.md](docs/PRODUCT_SHELL.md) | Telas, fluxos, fórmulas de RPG e save do produto offline |
 | [docs/PROGRESS.md](docs/PROGRESS.md) | Diário de progresso |
 
 ## Ambiente
@@ -100,7 +101,9 @@ Stack: Godot 4.x · GDScript · simulação 2D · Blender 5.x LTS (mais tarde) �
   Na máquina atual o Godot está em `~/Downloads/Godot.app`: use
   `export GODOT=~/Downloads/Godot.app/Contents/MacOS/Godot`.
 - **Testes (checagem estática + suíte headless):** `tools/run_tests.sh` (código ≠ 0 em qualquer falha).
-- **Combat Sandbox (jogável, cena principal):** `tools/run_combat_sandbox.sh`; `--capture=<dir absoluto>` joga uma
+- **Jogo (cena principal = tela inicial):** `tools/run_game.sh`. Revisão visual do produto (telas + PvP + PvE jogados pela IA):
+  `tools/run_shell_capture.sh <dir absoluto>`. Save local em `user://reference_clone_save.json` (reset na tela inicial).
+- **Combat Sandbox (hot-seat, debug):** `tools/run_combat_sandbox.sh`; `--capture=<dir absoluto>` joga uma
   partida roteirizada com screenshots (revisão visual) e fecha.
 - **Ballistics Lab:** `tools/run_ballistics_lab.sh`. `--capture=<dir absoluto>` salva
   screenshots de todos os cenários e fecha; use isso para revisar mudanças visuais.

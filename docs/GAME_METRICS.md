@@ -13,7 +13,7 @@ Regras:
 Unidade base: **u** = 1 unidade de distância horizontal = 1,0 unidade de mundo (1/10 da largura visível da câmera).
 Tempo em segundos. Ângulos em graus a partir da horizontal, na direção em que o personagem está virado.
 
-Última revisão: 06/10/2026 (Marco 1).
+Última revisão: 09/10/2026 (Marco 5).
 
 ---
 
@@ -117,6 +117,23 @@ Não são constantes balísticas nem de gameplay. Detalhes em [ART_DIRECTION_PRO
 | Altura do personagem | 1,08 u (até o tufo; ≈ 1,0 u sem ele) |
 | Cabeça desenhada | 0,52 × 0,49 u (≈ 45% da altura total) |
 | Resolução de render | 256 px/u; corpo 320 × 320 px, arma 256 × 128 px, projétil 64 × 64 px |
+
+### Métricas de produto (REFERENCE ESTIMATE, Marco 5)
+
+Estimativas de engenharia para o loop local; fórmulas completas em [PRODUCT_SHELL.md](PRODUCT_SHELL.md) (OQ-24/25).
+Não alteram a balística calibrada.
+
+| Métrica | Valor | Classificação |
+|---|---|---|
+| HP do jogador | 950 + 50 × nível + defesa / 8 (≈ 1005 no nível 1) | ESTIMATED |
+| Dano por acerto | harm × (1 + atk/1000) × redução por defesa e armor × queda (≈ 185 com a arma inicial) | ESTIMATED |
+| Crítico | sorte / 4000, ×1,5 | ESTIMATED |
+| Armas | Sunburst harm 180, 0–90°, cratera 0,6 u · Boulder harm 165, 30–90°, cratera 0,85 u · Spark harm 230, 0–65°, cratera 0,45 u | ESTIMATED (design) |
+| Inimigos | Sprout Grunt 420 HP (corpo-a-corpo) · Pebble Slinger 520 HP (artilharia) · Shell King 2600 HP, cabeça r 0,72 u a 1,3 u (chefe) | ESTIMATED (design) |
+| Dificuldade | HP × 1 / 1,5 / 2,2; dano × 1 / 1,3 / 1,7; recompensa × 1 / 1,7 / 2,6 | ESTIMATED |
+| Erro de mira da IA | 1,8° (oponentes), 1,5° (aliado), gaussiano | GAME DESIGN PLACEHOLDER |
+| EXP por nível | 100 + 60n + 20n², nível máx. 40 | ESTIMATED |
+| Fortalecer | máx. +12; 3 pedras; queda após +3 sem Selo Guardião; custo 150N² + 100 Gold | ESTIMATED |
 
 ## UNKNOWN
 

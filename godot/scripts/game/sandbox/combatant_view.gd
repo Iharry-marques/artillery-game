@@ -9,6 +9,7 @@ extends Node2D
 ##   └── Head
 ##       └── HeadHitbox (marker at the gameplay hit circle; drawn by the F2 overlay)
 ## HP bar, name and the active-turn marker are drawn on the root (never mirrored).
+## Monsters (EnemyArt visuals) use their own sprite and head geometry and no weapon.
 
 const SHADOW_COLOR: Color = Color(0.0, 0.0, 0.0, 0.22)
 const HP_BAR_WIDTH_UNITS: float = 0.74
@@ -35,6 +36,8 @@ var _head: Node2D
 var _hitbox: Node2D
 var _flash: float = 0.0
 var _time: float = 0.0
+var _enemy_art: EnemyArt
+var _bar_height_u: float = 1.0
 
 
 func _ready() -> void:
@@ -62,15 +65,25 @@ func _ready() -> void:
 
 ## Binds the art; call after `state`, `rules` and `art` are set.
 func setup() -> void:
-	var scale_factor: float = art.sprite_scale()
-	_body.scale = Vector2.ONE * scale_factor
-	_body.offset = -art.feet_anchor_px
+	var enemies: EnemyArt = EnemyArt.shared()
+	_enemy_art = enemies if enemies.has(state.visual) else null
 	var weapon: Sprite2D = _weapon_pivot.get_node("Weapon") as Sprite2D
-	weapon.texture = art.weapon
-	weapon.scale = Vector2.ONE * scale_factor
+	if _enemy_art != null:
+		_body.scale = Vector2.ONE * _enemy_art.sprite_scale()
+		_body.offset = -_enemy_art.feet_anchor_px(state.visual)
+		_body.texture = _enemy_art.texture(state.visual)
+		_bar_height_u = state.head_height + state.head_radius + 0.12
+	else:
+		_body.scale = Vector2.ONE * art.sprite_scale()
+		_body.offset = -art.feet_anchor_px
+		_bar_height_u = art.total_height_u
+	var weapon_key: StringName = state.loadout.weapon_art if state.loadout != null else &"launcher"
+	_weapon_pivot.visible = state.has_weapon()
+	weapon.texture = art.weapon_texture(weapon_key)
+	weapon.scale = Vector2.ONE * art.sprite_scale()
 	weapon.offset = -art.weapon_pivot_px
 	_weapon_pivot.position = WorldCanvas.to_canvas(rules.weapon_pivot_forward, -rules.weapon_pivot_up)
-	_head.position = WorldCanvas.to_canvas(0.0, -rules.head_center_height)
+	_head.position = WorldCanvas.to_canvas(0.0, -state.head_height)
 
 
 ## Gameplay angle (degrees above the horizontal, towards facing) -> local rotation.
@@ -93,8 +106,13 @@ func _process(delta: float) -> void:
 	if _flash > 0.0:
 		shake = sin(_time * 70.0) * SHAKE_UNITS * (_flash / FLASH_TIME)
 	position = WorldCanvas.to_canvas(state.feet_x + shake, state.feet_y)
-	_visual.scale = Vector2(state.facing, 1.0)
-	_body.texture = art.body_texture(variant_index, is_aiming and state.alive)
+	if _enemy_art != null:
+		# Idle "breathing" squash so monsters do not look frozen (presentation only).
+		var breath: float = sin(_time * 2.6 + state.index) * 0.025 if state.alive else 0.0
+		_visual.scale = Vector2(state.facing * (1.0 - breath), 1.0 + breath)
+	else:
+		_visual.scale = Vector2(state.facing, 1.0)
+		_body.texture = art.body_texture(variant_index, is_aiming and state.alive)
 	_weapon_pivot.rotation = weapon_rotation(state.angle)
 	var tint: Color = Color.WHITE if state.alive else DEAD_TINT
 	if _flash > 0.0:
@@ -107,15 +125,15 @@ func _draw() -> void:
 	var ppu: float = WorldCanvas.PIXELS_PER_UNIT
 	var scale_px: float = WorldCanvas.screen_scale(self)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.32))
-	draw_circle(Vector2.ZERO, 0.32 * ppu, SHADOW_COLOR)
+	draw_circle(Vector2.ZERO, maxf(0.32, state.head_radius * 1.1) * ppu, SHADOW_COLOR)
 	draw_set_transform_matrix(Transform2D.IDENTITY)
 
-	var top: float = -(art.total_height_u + HP_GAP_UNITS) * ppu
+	var top: float = -(_bar_height_u + HP_GAP_UNITS) * ppu
 	var width: float = HP_BAR_WIDTH_UNITS * ppu
 	var height: float = HP_BAR_HEIGHT_PX / scale_px
 	var back := Rect2(-0.5 * width, top, width, height)
 	draw_rect(back.grow(1.5 / scale_px), Color(0.05, 0.05, 0.08, 0.85))
-	var fraction: float = float(state.hp) / float(rules.starting_hp)
+	var fraction: float = clampf(float(state.hp) / float(maxi(state.max_hp, 1)), 0.0, 1.0)
 	var fill: Color = Color(0.35, 0.92, 0.4).lerp(Color(0.98, 0.3, 0.28), 1.0 - fraction)
 	draw_rect(Rect2(back.position, Vector2(width * fraction, height)), fill)
 	WorldCanvas.draw_text(

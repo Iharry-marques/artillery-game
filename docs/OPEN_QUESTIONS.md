@@ -139,6 +139,19 @@ Nenhuma no momento. As duas que existiam foram reclassificadas no Marco 1:
   ~0,07–0,1° por unidade de altura. Se o jogador lembra de corrigir bem mais que isso, o modelo está incompleto.
 - **Resolve com:** memória do jogador; depois, previsão pela nossa simulação para comparar.
 
+### OQ-24 · Fórmulas de atributos, dano e fortalecimento
+- **Pergunta:** quão perto as fórmulas de RPG (HP, dano, crítico, curva de fortalecimento, EXP) devem ficar do jogo clássico?
+- **Estado:** REFERENCE ESTIMATE (D-045, [PRODUCT_SHELL.md](PRODUCT_SHELL.md)); confiança LOW.
+- **Resolve com:** memória do jogador (quantos acertos para derrubar alguém do mesmo nível, sensação do +5/+9) e playtest.
+
+### OQ-25 · Ritmo das partidas PvP
+- **Pergunta:** um duelo IA × IA leva ~20–35 turnos (dano ~185 por acerto, HP ~1000, acerto da IA ~35%). O clássico era mais curto?
+- **Resolve com:** memória do jogador + playtest; ajuste em dano base, HP ou erro de mira da IA (sem tocar na balística).
+
+### OQ-26 · Ordem de turno com delay e agilidade
+- **Pergunta:** a agilidade deve alimentar uma fila de turnos por atraso (delay) em vez da alternância entre times?
+- **Default:** alternância intercalada entre times (D-043); agilidade só entra no Combat Power. Relacionada a OQ-14.
+
 ## OPTIONAL
 
 ### OQ-03 · Aspect ratio da área de jogo clássica

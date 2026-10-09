@@ -4,6 +4,29 @@ Diário de engenharia. Entrada mais recente no topo.
 
 ---
 
+## 09/10/2026 · Marco 5: Product Shell (Reference Clone navegável)
+
+**Feito**
+- Domínio headless `scripts/meta/`: perfil, inventário (48), equipamento (arma/roupa/chapéu/anel/colar), carteira (Gold,
+  Coupons, Vouchers), progressão (nível 40), atributos derivados, ferreiro (fortalecer/compor/fundir/transferir), loja,
+  missões, correio, salas, recompensas com cartas, save JSON local com autosave e reset.
+- Conteúdo original: 3 arquétipos de arma, roupas/chapéus/acessórios, pedras, amuletos, kit de cura, caixa inicial,
+  3 mapas PvP + 3 de masmorra, 3 inimigos (corpo-a-corpo, artilheiro, chefe), masmorra de 3 estágios com 3 dificuldades,
+  7 missões. Arte nova no Blender: inimigos, prédios da cidade, armas e projéteis por arquétipo.
+- 12 telas (boot, personagem, cidade, status, bolsa, ferreiro, loja, salão, sala de batalha, resultado, expedição, sala
+  do grupo) + modais (missões, correio, amigos, ranking, guilda, configurações).
+- Batalha em modo produto: PvP 1v1/2v2 contra IA, PvE em estágios com HP carregado, chefe com onda de choque, kit de
+  cura, desistência, resultado com EXP/Gold/level up e cartas. Sandbox, Lab e calibração intactos.
+- Janela redimensionável 1440×810 com UI escalável e tela cheia (F11/Alt+Enter).
+- Testes: 73 → 104 (domínio, ferreiro, progressão/save, modos de batalha, telas, cena PvE/PvP, arte × hitbox de inimigos).
+- Revisão visual com `tools/run_shell_capture.sh` (20 capturas); corrigidos: fundo sem redesenho, rótulo do ferreiro sob o
+  log, botão "Entrar" cortado no salão, cards do HUD sobrepostos, roupa do aliado, botões cortados e contraste no resultado.
+
+**Não feito (de propósito)**
+- Backend, login, pagamento, rede. Guilda/amigos/ranking são mock. Compor/fundir/transferir sem animações.
+
+---
+
 ## 09/10/2026 · Marco 4: Battle Reference Clone
 
 **Feito**

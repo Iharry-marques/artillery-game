@@ -181,3 +181,23 @@ CombatSandbox (Node2D)
 - Geometria de gameplay nova em `CombatantState`: `weapon_pivot_*`, `muzzle_*(angle)` (ponta do cano), `is_inside_head`.
 - `CombatWorldQuery` recebe o atirador para ignorar a própria cabeça até o projétil sair dela.
 
+## 10. Product Shell (Marco 5)
+
+```
+scripts/meta/      domínio headless: PlayerProfile, Inventory, EquipmentLoadout, CurrencyWallet, Progression,
+                   CharacterStats, EnhancementRules, Blacksmith, ShopService, RoomState, RewardCalculator,
+                   SaveService, ContentCatalog/ContentDatabase, GameSession (singleton estático)
+scripts/shell/     UiKit (tema), ShellScreen (base), ScreenRouter, DisplayControl (autoload DisplayManager),
+                   widgets/ (TopBar, ItemSlot, ItemIcon, CharacterPreview, ModalWindow, Toast, CityBuilding)
+                   screens/ (uma tela por script; cenas em scenes/shell/*.tscn)
+scripts/game/combat/  BattleSetup → CombatMatch (times, loadouts, estágios), CombatLoadout, DamageFormula,
+                      ArtilleryPlanner; BattleOutcome volta para GameSession.finish_battle
+scripts/game/sandbox/ cena de batalha (modo sandbox ou batalha), AiTurnDriver
+scripts/debug/shell_capture.gd  revisão visual automatizada do produto
+```
+
+- Fluxo: tela → `GameSession` (regra + autosave) → tela. Telas não calculam regras.
+- Batalha: tela define `pending_battle` → `ScreenRouter.go(&"battle")` → cena joga → `finish_battle(outcome)` → `result`.
+- A simulação balística, a câmera de 10 u e a separação gameplay/apresentação seguem iguais. Detalhes em
+  [PRODUCT_SHELL.md](PRODUCT_SHELL.md).
+

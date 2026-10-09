@@ -11,8 +11,12 @@ config_version=5
 [application]
 
 config/name="Artillery Game"
-run/main_scene="res://scenes/gameplay/combat_sandbox.tscn"
+run/main_scene="res://scenes/shell/boot.tscn"
 config/features=PackedStringArray("4.7")
+
+[autoload]
+
+DisplayManager="*res://scripts/shell/display_manager.gd"
 
 [debug]
 
@@ -23,8 +27,13 @@ gdscript/warnings/unsafe_call_argument=2
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=720
+window/size/viewport_width=1600
+window/size/viewport_height=900
+window/size/window_width_override=1440
+window/size/window_height_override=810
+window/size/resizable=true
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 
 [rendering]
 

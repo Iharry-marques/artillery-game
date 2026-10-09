@@ -53,6 +53,8 @@ VARIANTS = {
 }
 WEAPON_COLORS = {"tube": (1.0, 0.58, 0.16), "ring": (1.0, 0.86, 0.22), "dark": (0.22, 0.22, 0.32), "fin": (0.2, 0.78, 0.75)}
 PROJECTILE_COLORS = {"body": (0.95, 0.3, 0.25), "band": (1.0, 0.85, 0.2), "fin": (0.25, 0.25, 0.35)}
+WEAPON_STYLES = ("launcher", "mortar", "spark")
+PROJECTILE_STYLES = ("shell", "boulder", "spark", "pebble")
 
 _materials = {}
 
@@ -295,7 +297,11 @@ def build_character(colors, pose):
 # --- Weapon and projectile ---------------------------------------------------------------
 
 
-def build_weapon():
+def build_weapon(style="launcher"):
+    if style == "mortar":
+        return build_mortar()
+    if style == "spark":
+        return build_spark()
     parts = []
     tube = toon_material("Tube", WEAPON_COLORS["tube"])
     ring = toon_material("Ring", WEAPON_COLORS["ring"])
@@ -316,7 +322,66 @@ def build_weapon():
     return root
 
 
-def build_projectile():
+def build_mortar():
+    """Short, fat high-angle mortar: slate barrel, bronze bands, a drum at the back."""
+    parts = []
+    barrel = toon_material("MortarBarrel", (0.45, 0.52, 0.66))
+    bronze = toon_material("MortarBronze", (0.86, 0.6, 0.25))
+    dark = toon_material("Dark", WEAPON_COLORS["dark"])
+    parts.append(cylinder("Barrel", (0.17, 0, 0.0), 0.088, 0.5, barrel))
+    parts.append(cylinder("Muzzle", (BARREL_LENGTH - 0.035, 0, 0.0), 0.112, 0.08, bronze))
+    parts.append(cylinder("BandA", (0.08, 0, 0.0), 0.094, 0.04, bronze))
+    parts.append(cylinder("BandB", (0.27, 0, 0.0), 0.094, 0.04, bronze))
+    parts.append(ellipsoid("Drum", (-0.1, 0, 0.0), (0.1, 0.1, 0.1), dark))
+    parts.append(ellipsoid("Bolt", (-0.1, -0.09, 0.0), (0.03, 0.02, 0.03), bronze))
+    parts.append(ellipsoid("Grip", (0.0, 0, -0.08), (0.025, 0.025, 0.05), dark))
+    parts.append(ellipsoid("Hand", (0.0, -0.06, -0.02), (0.05, 0.045, 0.05), toon_material("Skin", SKIN)))
+    root = bpy.data.objects.new("WeaponRoot", None)
+    bpy.context.collection.objects.link(root)
+    parent_all(parts, root)
+    return root
+
+
+def build_spark():
+    """Slim energy repeater: cyan barrel, yellow coils and a crystal core."""
+    parts = []
+    body = toon_material("SparkBody", (0.25, 0.75, 0.95))
+    coil = toon_material("SparkCoil", (1.0, 0.85, 0.2))
+    crystal = toon_material("SparkCrystal", (0.75, 0.45, 1.0))
+    dark = toon_material("Dark", WEAPON_COLORS["dark"])
+    parts.append(cylinder("Barrel", (0.17, 0, 0.0), 0.045, 0.56, body))
+    parts.append(cylinder("Muzzle", (BARREL_LENGTH - 0.02, 0, 0.0), 0.06, 0.05, coil))
+    for i, x in enumerate((0.1, 0.18, 0.26, 0.34)):
+        parts.append(cylinder(f"Coil{i}", (x, 0, 0.0), 0.058, 0.025, coil))
+    parts.append(ellipsoid("Core", (-0.1, 0, 0.02), (0.07, 0.05, 0.07), crystal))
+    parts.append(ellipsoid("Stock", (-0.08, 0, -0.05), (0.08, 0.035, 0.04), dark))
+    parts.append(ellipsoid("Grip", (0.0, 0, -0.07), (0.022, 0.022, 0.05), dark))
+    parts.append(ellipsoid("Hand", (0.0, -0.05, -0.02), (0.05, 0.045, 0.05), toon_material("Skin", SKIN)))
+    root = bpy.data.objects.new("WeaponRoot", None)
+    bpy.context.collection.objects.link(root)
+    parent_all(parts, root)
+    return root
+
+
+def build_projectile(style="shell"):
+    if style == "boulder":
+        parts = [ellipsoid("Rock", (0, 0, 0), (0.075, 0.065, 0.068), toon_material("Rock", (0.6, 0.58, 0.55)))]
+        parts.append(ellipsoid("RockChip", (0.03, -0.03, 0.03), (0.03, 0.02, 0.025), toon_material("RockLight", (0.75, 0.72, 0.68)), outline=False))
+    elif style == "spark":
+        parts = [ellipsoid("Orb", (0, 0, 0), (0.06, 0.05, 0.05), toon_material("Orb", (0.45, 0.95, 1.0)))]
+        parts.append(ellipsoid("OrbCore", (0.01, -0.03, 0.0), (0.03, 0.02, 0.03), flat_material("OrbGlow", (1.0, 1.0, 0.85)), outline=False))
+        parts.append(ellipsoid("Tail", (-0.07, 0, 0), (0.05, 0.02, 0.025), toon_material("Tail", (0.75, 0.45, 1.0))))
+    elif style == "pebble":
+        parts = [ellipsoid("Pebble", (0, 0, 0), (0.055, 0.05, 0.05), toon_material("Pebble", (0.55, 0.42, 0.3)))]
+    else:
+        return build_shell()
+    root = bpy.data.objects.new("ProjectileRoot", None)
+    bpy.context.collection.objects.link(root)
+    parent_all(parts, root)
+    return root
+
+
+def build_shell():
     parts = []
     parts.append(ellipsoid("ShellBody", (0.0, 0, 0), (0.07, 0.045, 0.045), toon_material("ShellBody", PROJECTILE_COLORS["body"])))
     parts.append(cylinder("ShellBand", (0.0, 0, 0), 0.047, 0.025, toon_material("ShellBand", PROJECTILE_COLORS["band"])))
@@ -372,12 +437,14 @@ def main():
             bpy.context.view_layer.update()
             render(BODY_FRAME, os.path.join(out, f"player_{variant}_{pose}.png"))
 
-    reset_scene()
-    build_weapon()
-    render(WEAPON_FRAME, os.path.join(out, "weapon_launcher.png"))
-    reset_scene()
-    build_projectile()
-    render(PROJECTILE_FRAME, os.path.join(out, "projectile_shell.png"))
+    for style in WEAPON_STYLES:
+        reset_scene()
+        build_weapon(style)
+        render(WEAPON_FRAME, os.path.join(out, f"weapon_{style}.png"))
+    for style in PROJECTILE_STYLES:
+        reset_scene()
+        build_projectile(style)
+        render(PROJECTILE_FRAME, os.path.join(out, f"projectile_{style}.png"))
 
     hair_top = HEAD_CENTER_Z + (HEAD_RADIUS + 0.028) * HEAD_SCALE[2] + 0.01 + 0.08
     meta = {
@@ -408,4 +475,5 @@ def main():
     print("REFERENCE CHARACTER DONE", out)
 
 
-main()
+if __name__ == "__main__":
+    main()

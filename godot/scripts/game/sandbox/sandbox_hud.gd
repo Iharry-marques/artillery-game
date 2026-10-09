@@ -12,6 +12,9 @@ const DIM_TEXT: Color = Color(0.68, 0.74, 0.86)
 const ACCENT: Color = Color(1.0, 0.82, 0.28)
 const BANNER_TIME: float = 1.6
 const HELP_TEXT: String = "A/D move · W/S angle · SPACE power\nR reset · Z wind 0 · F2 hitbox · F3 debug · F auto"
+const BATTLE_HELP_TEXT: String = "A/D move · W/S angle · SPACE power\n1 Healing Kit · F2 hitbox · ESC leave"
+const CARD_SIZE: Vector2 = Vector2(250, 54)
+const COMPACT_CARD_SIZE: Vector2 = Vector2(236, 46)
 
 
 static func panel_style(radius: int = 10) -> StyleBoxFlat:
@@ -81,6 +84,13 @@ class AngleGauge:
 			var a: float = deg_to_rad(90.0 * i / 30.0)
 			points.append(center + Vector2(dir * cos(a), -sin(a)) * radius)
 		draw_colored_polygon(points, Color(0.16, 0.2, 0.32, 0.95))
+		if min_angle > 0.0 or max_angle < 90.0:
+			# Weapon angle range (e.g. a mortar only fires 30-90 degrees).
+			var band := PackedVector2Array([center])
+			for i in 21:
+				var a: float = deg_to_rad(lerpf(min_angle, max_angle, i / 20.0))
+				band.append(center + Vector2(dir * cos(a), -sin(a)) * radius)
+			draw_colored_polygon(band, Color(0.3, 0.75, 0.45, 0.35))
 		draw_arc(center, radius, start, start + PI * 0.5, 32, Color(0.75, 0.82, 1.0, 0.9), 2.0)
 		for deg in range(0, 91, 10):
 			var a: float = deg_to_rad(float(deg))
@@ -134,6 +144,7 @@ class WindIndicator:
 class PlayerCard:
 	extends Control
 	var display_name: String = ""
+	var subtitle: String = ""
 	var hp: int = 100
 	var max_hp: int = 100
 	var color: Color = Color.WHITE
@@ -148,17 +159,20 @@ class PlayerCard:
 			style.set_border_width_all(3)
 		draw_style_box(style, Rect2(Vector2.ZERO, size))
 		var badge := Vector2(30, size.y * 0.5)
-		draw_circle(badge, 20.0, Color(0.05, 0.05, 0.1))
-		draw_circle(badge, 17.0, color if alive else Color(0.45, 0.45, 0.5))
-		draw_string(font, Vector2(56, 22), display_name.to_upper(), HORIZONTAL_ALIGNMENT_LEFT, -1, 15, TEXT_COLOR if alive else DIM_TEXT)
-		var bar := Rect2(Vector2(56, 30), Vector2(size.x - 70, 14))
+		var radius: float = minf(20.0, size.y * 0.4)
+		draw_circle(badge, radius, Color(0.05, 0.05, 0.1))
+		draw_circle(badge, radius - 3.0, color if alive else Color(0.45, 0.45, 0.5))
+		draw_string(font, Vector2(56, 20), display_name.to_upper(), HORIZONTAL_ALIGNMENT_LEFT, size.x - 120, 15, TEXT_COLOR if alive else DIM_TEXT)
+		if subtitle != "" and not (active and alive):
+			draw_string(font, Vector2(size.x - 62, 20), subtitle, HORIZONTAL_ALIGNMENT_RIGHT, 50, 12, DIM_TEXT)
+		var bar := Rect2(Vector2(56, size.y - 22), Vector2(size.x - 70, 13))
 		draw_rect(bar.grow(2), Color(0.02, 0.03, 0.06))
 		var fraction: float = clampf(float(hp) / max_hp, 0.0, 1.0)
 		draw_rect(Rect2(bar.position, Vector2(bar.size.x * fraction, bar.size.y)), Color(0.35, 0.92, 0.4).lerp(Color(0.98, 0.3, 0.28), 1.0 - fraction))
 		var label: String = "%d / %d" % [hp, max_hp] if alive else "DEFEATED"
 		draw_string(font, Vector2(bar.position.x + 6, bar.end.y - 2), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color(0.05, 0.05, 0.08))
 		if active and alive:
-			draw_string(font, Vector2(size.x - 52, 22), "TURN", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, ACCENT)
+			draw_string(font, Vector2(size.x - 52, 20), "TURN", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, ACCENT)
 
 
 var minimap: SandboxMinimap
@@ -173,18 +187,12 @@ var _movement: ProgressBar
 var _message: Label
 var _banner: Label
 var _banner_age: float = BANNER_TIME
+var _help: Label
 
 
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	for i in 2:
-		var card := PlayerCard.new()
-		card.position = Vector2(12, 12 + 62 * i)
-		card.size = Vector2(250, 54)
-		add_child(card)
-		_cards.append(card)
 
 	_wind = WindIndicator.new()
 	_wind.size = Vector2(210, 70)
@@ -267,8 +275,26 @@ func _ready() -> void:
 	back.set_corner_radius_all(4)
 	_movement.add_theme_stylebox_override("background", back)
 	right.add_child(_movement)
-	var help := _make_label(right, 11, DIM_TEXT)
-	help.text = HELP_TEXT
+	_help = _make_label(right, 11, DIM_TEXT)
+	_help.text = HELP_TEXT
+
+
+func set_help(text: String) -> void:
+	_help.text = text
+
+
+## One card per combatant: full size for duels, compact for team and PvE battles.
+func _ensure_cards(count: int) -> void:
+	while _cards.size() < count:
+		var card := PlayerCard.new()
+		add_child(card)
+		_cards.append(card)
+	var compact: bool = count > 2
+	var card_size: Vector2 = COMPACT_CARD_SIZE if compact else CARD_SIZE
+	for i in _cards.size():
+		_cards[i].visible = i < count
+		_cards[i].size = card_size
+		_cards[i].position = Vector2(12, 12 + (card_size.y + 6.0) * i)
 
 
 func show_message(text: String) -> void:
@@ -291,11 +317,13 @@ func _process(delta: float) -> void:
 
 func refresh(combat: CombatMatch) -> void:
 	var active: CombatantState = combat.active()
+	_ensure_cards(combat.combatants.size())
 	for c in combat.combatants:
 		var card: PlayerCard = _cards[c.index]
 		card.display_name = c.display_name
+		card.subtitle = "YOU" if c.is_local_player else ("AI" if c.controller != BattleSetup.Controller.HUMAN else "")
 		card.hp = c.hp
-		card.max_hp = combat.rules.starting_hp
+		card.max_hp = c.max_hp
 		card.color = player_colors[c.index]
 		card.active = c.index == combat.active_index and combat.phase != CombatMatch.Phase.GAME_OVER
 		card.alive = c.alive
@@ -306,6 +334,9 @@ func refresh(combat: CombatMatch) -> void:
 	_wind.queue_redraw()
 	_angle.angle = active.angle
 	_angle.facing = active.facing
+	var limits: Vector2i = combat.angle_limits(active)
+	_angle.min_angle = limits.x
+	_angle.max_angle = limits.y
 	_angle.queue_redraw()
 	var charging: bool = combat.phase == CombatMatch.Phase.CHARGING
 	_power.value = combat.power if charging else 0.0
@@ -315,7 +346,7 @@ func refresh(combat: CombatMatch) -> void:
 	_power_value.text = "POWER %.1f%s" % [combat.power if charging else 0.0, "" if is_nan(combat.last_shot_power) else "     last shot %.1f" % combat.last_shot_power]
 	_status.text = "TURN %d   %s" % [combat.turn_number, active.display_name.to_upper()]
 	_status.add_theme_color_override("font_color", player_colors[active.index])
-	_movement.max_value = combat.rules.movement_budget
+	_movement.max_value = maxf(active.turn_movement, 0.001)
 	_movement.value = active.movement_left
 
 

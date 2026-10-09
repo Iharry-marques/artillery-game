@@ -42,7 +42,7 @@ func first_hit(x0: float, y0: float, x1: float, y1: float) -> BallisticHit:
 		if not combatant.alive or (_leaving_shooter and combatant == _shooter):
 			continue
 		var head_t: float = segment_circle_hit(
-			x0, y0, x1, y1, combatant.head_center_x(), combatant.head_center_y(_rules), _rules.head_radius
+			x0, y0, x1, y1, combatant.head_center_x(), combatant.head_center_y(), combatant.head_radius
 		)
 		if head_t >= 0.0 and head_t < best_t:
 			best_t = head_t

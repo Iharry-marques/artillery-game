@@ -21,6 +21,18 @@ var projectile_center_px: Vector2
 var bodies: Dictionary = {}
 var weapon: Texture2D
 var projectile: Texture2D
+## Art key -> texture (launcher, mortar, spark / shell, boulder, spark, pebble).
+var weapons: Dictionary = {}
+var projectiles: Dictionary = {}
+
+static var _cached: CharacterProxyArt
+
+
+## Loaded once per run (textures are shared by every screen).
+static func shared() -> CharacterProxyArt:
+	if _cached == null:
+		_cached = load_default()
+	return _cached
 
 
 static func load_default() -> CharacterProxyArt:
@@ -47,9 +59,21 @@ static func load_default() -> CharacterProxyArt:
 	for variant in VARIANTS:
 		for pose: String in ["idle", "aim"]:
 			art.bodies["%s_%s" % [variant, pose]] = load(DIRECTORY.path_join("player_%s_%s.png" % [variant, pose])) as Texture2D
-	art.weapon = load(DIRECTORY.path_join("weapon_launcher.png")) as Texture2D
-	art.projectile = load(DIRECTORY.path_join("projectile_shell.png")) as Texture2D
+	for key: String in ["launcher", "mortar", "spark"]:
+		art.weapons[StringName(key)] = load(DIRECTORY.path_join("weapon_%s.png" % key)) as Texture2D
+	for key: String in ["shell", "boulder", "spark", "pebble"]:
+		art.projectiles[StringName(key)] = load(DIRECTORY.path_join("projectile_%s.png" % key)) as Texture2D
+	art.weapon = art.weapons[&"launcher"]
+	art.projectile = art.projectiles[&"shell"]
 	return art
+
+
+func weapon_texture(key: StringName) -> Texture2D:
+	return weapons.get(key, weapon)
+
+
+func projectile_texture(key: StringName) -> Texture2D:
+	return projectiles.get(key, projectile)
 
 
 ## Scale from art pixels to canvas pixels.
